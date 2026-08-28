@@ -4,7 +4,7 @@ Podmieniasz pliki **zachowując nazwy i ścieżki** — kod ich nie zmienia.
 Ścieżki są zebrane w `site.config.ts` (klucz `assety`) — tam też podmienisz
 rozszerzenie, jeśli wolisz inny format.
 
-Legenda: ✅ = plik już jest (z Twoich grafik) · ⬜ = do dostarczenia
+Legenda: ✅ = Twoja grafika, gotowe · 🟨 = placeholder wygenerowany na start, do podmiany · ⬜ = do dostarczenia
 
 ---
 
@@ -12,7 +12,7 @@ Legenda: ✅ = plik już jest (z Twoich grafik) · ⬜ = do dostarczenia
 
 | Plik | Status | Wymiary | Format | Uwagi |
 |---|---|---|---|---|
-| `logo.svg` | ⬜ | wektor | SVG | Logotyp „HUKSZY". Używany w preloaderze i stopce. Najlepiej z przezroczystym tłem. |
+| `logo.svg` | ⬜ | wektor | SVG | Logotyp „HUKSZY". Dopóki go nie ma, preloader i stopka pokazują nick złożony fontem Anton. |
 | `logo.png` | ⬜ | 1024×1024 | PNG (alpha) | Fallback, gdy SVG niedostępny. |
 | `sygnet.png` | ⬜ | 512×512 | PNG (alpha) | Sam znak „H" — favicon i ikona PWA. |
 
@@ -27,7 +27,7 @@ Legenda: ✅ = plik już jest (z Twoich grafik) · ⬜ = do dostarczenia
 
 | Plik | Status | Wymiary | Format | Uwagi |
 |---|---|---|---|---|
-| `portret.png` | ⬜ | 1200×1600 | PNG (alpha) | Wycięta postać/twarz do sekcji „O mnie". Bez tła. |
+| `portret.png` | 🟨 | 900×1200 | PNG (alpha) | W repo leży wygenerowany placeholder (sylwetka). Podmień na wyciętą postać/twarz bez tła — najlepiej 1200×1600. |
 
 ## klipy/
 
@@ -35,10 +35,12 @@ Miniatury do sekcji Highlights. Podpisy i linki ustawiasz w `site.config.ts` →
 
 | Plik | Status | Wymiary | Format |
 |---|---|---|---|
-| `klip-1.jpg` … `klip-6.jpg` | ⬜ | 1280×720 (16:9) | JPG/WebP |
+| `klip-1.png` … `klip-6.png` | 🟨 | 1280×720 (16:9) | PNG (placeholder) |
 
-> Dopóki plików nie ma, siatka pokazuje wygenerowany placeholder w kolorach marki —
-> strona się nie psuje.
+> W repo leży 6 wygenerowanych placeholderów w kolorach marki, żeby siatka od razu
+> wyglądała jak trzeba. **Podmiana:** nadpisz pliki zachowując nazwy `klip-N.png`,
+> albo wrzuć własne `.jpg`/`.webp` i popraw ścieżki w `site.config.ts` → `klipy`.
+> Tam też ustawiasz tytuł, podpis i link do klipu.
 
 ## social/
 
@@ -63,3 +65,5 @@ Miniatury do sekcji Highlights. Podpisy i linki ustawiasz w `site.config.ts` →
 - **Waga:** tła ≤ 400 KB, miniatury klipów ≤ 150 KB.
 - **Ciemne krawędzie:** grafiki wtapiają się w tło strony, więc rogi trzymaj czarne (`#0D0D0D`).
 - **Nazwy:** bez spacji i polskich znaków.
+- **Skąd biorą się ścieżki:** wszystkie są zebrane w `site.config.ts` → `assety`.
+  Jeśli zmieniasz rozszerzenie albo nazwę pliku, popraw je w jednym miejscu tam.
