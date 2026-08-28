@@ -1,0 +1,187 @@
+@import "tailwindcss";
+
+/* ===========================================================
+   HUKSZY — system wizualny
+   Kolory pochodzą z site.config.ts i są wstrzykiwane w layout.tsx
+   jako --akcent / --akcent-jasny / --tlo ... (fallbacki poniżej).
+   =========================================================== */
+
+:root {
+  --akcent: #e10600;
+  --akcent-jasny: #ff2a1f;
+  --akcent-ciemny: #8a0400;
+  --tlo: #0d0d0d;
+  --tlo-glebokie: #050505;
+  --tekst: #ffffff;
+}
+
+@theme inline {
+  --color-huk-red: var(--akcent);
+  --color-huk-red-hot: var(--akcent-jasny);
+  --color-huk-red-deep: var(--akcent-ciemny);
+  --color-huk-black: var(--tlo);
+  --color-huk-ink: var(--tlo-glebokie);
+  --color-huk-white: var(--tekst);
+
+  --font-display: var(--font-anton), "Arial Black", sans-serif;
+  --font-sans: var(--font-montserrat), system-ui, sans-serif;
+
+  --shadow-neon: 0 0 12px color-mix(in srgb, var(--akcent) 70%, transparent),
+    0 0 40px color-mix(in srgb, var(--akcent) 35%, transparent);
+  --shadow-neon-mocny: 0 0 8px color-mix(in srgb, var(--akcent-jasny) 90%, transparent),
+    0 0 28px color-mix(in srgb, var(--akcent) 65%, transparent),
+    0 0 80px color-mix(in srgb, var(--akcent) 30%, transparent);
+}
+
+@layer base {
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  html {
+    background: var(--tlo-glebokie);
+    color-scheme: dark;
+  }
+
+  /* Lenis steruje scrollem — natywny smooth wyłączony (poza reduced-motion) */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  body {
+    background: var(--tlo-glebokie);
+    color: var(--tekst);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    font-synthesis-weight: none;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: 0.01em;
+    line-height: 0.92;
+    text-transform: uppercase;
+  }
+
+  ::selection {
+    background: var(--akcent);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--akcent-jasny);
+    outline-offset: 3px;
+  }
+
+  /* Pasek przewijania w klimacie marki */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #000;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(var(--akcent-ciemny), var(--akcent));
+    border-radius: 999px;
+  }
+}
+
+/* ===========================================================
+   UTILITIES
+   =========================================================== */
+
+/* Nagłówek z gradientem biało-czerwonym (jak logotyp na grafikach) */
+@utility tekst-metal {
+  background: linear-gradient(168deg, #fff 0%, #f2f2f2 38%, var(--akcent) 78%, var(--akcent-ciemny) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* SplitText przenosi tekst do divów-dzieci, a `background-clip: text` działa
+   tylko na elemencie, który ma tło. Bez tego podzielony nagłówek z klasą
+   .tekst-metal renderuje się jako przezroczysty (czyli niewidoczny). */
+.tekst-metal .maska-linia-mask,
+.tekst-metal .maska-linia {
+  background: inherit;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Cienki, rozstrzelony podtytuł — Montserrat CAPS */
+@utility podtytul {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 0.72rem;
+}
+
+/* Czerwona poświata pod tekstem */
+@utility swiecacy-tekst {
+  text-shadow: 0 0 18px color-mix(in srgb, var(--akcent) 65%, transparent),
+    0 0 60px color-mix(in srgb, var(--akcent) 30%, transparent);
+}
+
+/* Panel HUD: czarne szkło + czerwona neonowa ramka */
+@utility panel-hud {
+  position: relative;
+  background: linear-gradient(150deg, rgba(20, 20, 20, 0.92), rgba(6, 6, 6, 0.96));
+  border: 1px solid color-mix(in srgb, var(--akcent) 45%, transparent);
+  box-shadow: inset 0 0 24px rgba(0, 0, 0, 0.9),
+    0 0 18px color-mix(in srgb, var(--akcent) 22%, transparent);
+  backdrop-filter: blur(6px);
+}
+
+/* Ziarno / szum — nakładka na sekcje */
+@utility ziarno {
+  position: relative;
+  isolation: isolate;
+}
+
+/* Rastrowe kropki (halftone) jak w rogach paneli */
+@utility halftone {
+  background-image: radial-gradient(color-mix(in srgb, var(--akcent) 55%, transparent) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
+
+/* Poziomy dzielnik z kreskami po bokach */
+@utility kreski {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+@utility linia-akcent {
+  background: linear-gradient(90deg, transparent, var(--akcent), transparent);
+}
+
+/* Blok maski tekstowej — GSAP animuje dziecko .maska-w */
+@utility maska {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+/* ===========================================================
+   REDUCED MOTION — twardy wyłącznik ruchu
+   =========================================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
