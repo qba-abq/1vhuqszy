@@ -87,7 +87,10 @@ export default function ObiektHero({ mobilnie }: Props) {
       grupa.current.position.z = (mobilnie ? -1.4 : -0.6) - s * 4;
       // na mobile bryła idzie wyżej, żeby nie leżała na akapicie
       grupa.current.position.y = (mobilnie ? 0.85 : 0) + Math.sin(t * 0.6) * 0.08 - s * 0.5;
-      grupa.current.scale.setScalar(bazowaSkala * (1 - s * 0.22));
+      // Bryła skaluje się z szerokością kadru 3D — na węższym oknie nie
+      // rozlewa się na tekst, na szerokim nie ginie w tle.
+      const dopasowanie = Math.min(1.1, Math.max(0.62, state.viewport.width / 8));
+      grupa.current.scale.setScalar(bazowaSkala * dopasowanie * (1 - s * 0.22));
     }
 
     if (rdzen.current) {
