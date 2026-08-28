@@ -108,7 +108,9 @@
    tylko na elemencie, który ma tło. Bez tego podzielony nagłówek z klasą
    .tekst-metal renderuje się jako przezroczysty (czyli niewidoczny). */
 .tekst-metal .maska-linia-mask,
-.tekst-metal .maska-linia {
+.tekst-metal .maska-linia,
+.tekst-metal .maska-znak-mask,
+.tekst-metal .maska-znak {
   background: inherit;
   -webkit-background-clip: text;
   background-clip: text;

@@ -35,7 +35,7 @@ type OpcjeWejscia = {
  */
 export function animujWejscie(
   cele: gsap.TweenTarget,
-  { trigger, y = 44, opoznienie = 0, odstep = 0.09, czas = 0.85, start = "top 85%" }: OpcjeWejscia = {},
+  { trigger, y = 48, opoznienie = 0, odstep = 0.13, czas = 1.05, start = "top 85%" }: OpcjeWejscia = {},
 ) {
   const lista = gsap.utils.toArray<Element>(cele);
   if (!lista.length) return;
@@ -69,7 +69,7 @@ export function animujWejscie(
  */
 export async function maskaTekstu(
   el: Element | null,
-  { opoznienie = 0, odstep = 0.12, start = "top 85%" } = {},
+  { opoznienie = 0, odstep = 0.16, start = "top 85%" } = {},
 ) {
   if (!el) return;
 
@@ -96,7 +96,7 @@ export async function maskaTekstu(
     onSplit: (self) =>
       gsap.from(self.lines, {
         yPercent: 110,
-        duration: 1,
+        duration: 1.25,
         delay: opoznienie,
         stagger: odstep,
         ease: EASE.ostre,

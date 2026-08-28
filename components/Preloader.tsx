@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { site } from "@/site.config";
-import { gsap } from "@/lib/animacje";
+import { gsap, SplitText } from "@/lib/animacje";
 import { oznaczStart } from "@/lib/start";
 import { ruchOgraniczony } from "@/lib/useRuchDozwolony";
 
@@ -21,11 +21,17 @@ export default function Preloader() {
   const lewa = useRef<HTMLDivElement>(null);
   const prawa = useRef<HTMLDivElement>(null);
   const tresc = useRef<HTMLDivElement>(null);
+  const logo = useRef<HTMLHeadingElement>(null);
+  const nad = useRef<HTMLParagraphElement>(null);
+  const dol = useRef<HTMLDivElement>(null);
   const pasek = useRef<HTMLDivElement>(null);
+  const szew = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Druga wizyta w tej samej sesji — bez intro.
-    if (sessionStorage.getItem(KLUCZ_SESJI) || ruchOgraniczony()) {
+    // Bez intro, gdy: druga wizyta w sesji, prośba o mniej ruchu, albo wejście
+    // z linku do konkretnej sekcji (np. .../#harmonogram) — kto zna cel, ten
+    // nie ma ochoty czekać na kurtynę.
+    if (sessionStorage.getItem(KLUCZ_SESJI) || ruchOgraniczony() || window.location.hash) {
       setAktywny(false);
       oznaczStart();
       return;
@@ -33,59 +39,104 @@ export default function Preloader() {
     sessionStorage.setItem(KLUCZ_SESJI, "1");
     document.body.style.overflow = "hidden";
 
-    const MIN_MS = 850; // minimalny czas ekranu, żeby licznik nie mrugnął
-    // Uwaga: każda milisekunda intro wydłuża LCP — strona jest zasłonięta.
+    // Na telefonie intro jest krótsze — patrz komentarz w site.config.ts.
+    const naTelefonie = window.matchMedia("(max-width: 767px)").matches;
+    const MIN_MS = naTelefonie
+      ? site.wydajnosc.dlugoscIntroMobileMs
+      : site.wydajnosc.dlugoscIntroMs;
     const wszystkie = 2; // fonty + reszta zasobów strony
     let zrobione = 0;
     const podbij = () => {
       zrobione += 1;
     };
 
-    // Realny postęp: fonty + zdarzenie load (grafika hero ma `priority`,
-    // więc przeglądarka pobiera ją równolegle — nie duplikujemy requestu).
     document.fonts.ready.then(podbij);
     if (document.readyState === "complete") podbij();
     else window.addEventListener("load", podbij, { once: true });
 
-    const tl = gsap.timeline({ paused: true });
+    const ctx = gsap.context(() => {
+      /* —— 1. wejście: nadtytuł, litery logo, pasek —— */
+      const podzial = SplitText.create(logo.current, {
+        type: "chars",
+        mask: "chars",
+        charsClass: "maska-znak",
+      });
 
-    // Licznik = wolniejsze z dwóch: postęp pobierania i upływ czasu.
-    // Dzięki temu 100% oznacza „naprawdę wczytane", a ekran nie znika w mgnieniu.
-    let biezacy = 0;
-    let raf = 0;
-    const poczatek = performance.now();
+      const wejscie = gsap.timeline();
+      wejscie
+        .from(nad.current, { opacity: 0, letterSpacing: "1.2em", duration: 0.9, ease: "power3.out" })
+        .from(
+          podzial.chars,
+          { yPercent: 120, duration: 0.9, stagger: 0.075, ease: "expo.out" },
+          "-=0.55",
+        )
+        .from(dol.current, { opacity: 0, y: 18, duration: 0.6, ease: "power2.out" }, "-=0.45");
 
-    const petla = () => {
-      const cel = Math.min(zrobione / wszystkie, (performance.now() - poczatek) / MIN_MS);
-      biezacy += (cel - biezacy) * 0.12;
+      /* —— 2. wyjście: drganie, błysk, rozdarcie —— */
+      const wyjscie = gsap.timeline({ paused: true, timeScale: naTelefonie ? 1.9 : 1 });
+      wyjscie
+        // krótkie drganie „zaraz pęknie"
+        .to(tresc.current, {
+          x: () => gsap.utils.random(-7, 7),
+          skewX: () => gsap.utils.random(-2.5, 2.5),
+          duration: 0.06,
+          repeat: 7,
+          ease: "none",
+        })
+        .set(tresc.current, { x: 0, skewX: 0 })
+        // szew rozświetla się na linii pęknięcia
+        .fromTo(
+          szew.current,
+          { opacity: 0, scaleY: 0.2 },
+          { opacity: 1, scaleY: 1, duration: 0.22, ease: "power2.out" },
+        )
+        .to(tresc.current, { opacity: 0, scale: 1.14, duration: 0.4, ease: "power2.in" }, "-=0.12")
+        .to(root.current, { backgroundColor: site.kolory.akcent, duration: 0.07 }, "-=0.1")
+        .to(root.current, { backgroundColor: "#050505", duration: 0.14 })
+        .addLabel("rozdarcie")
+        .to(szew.current, { opacity: 0, duration: 0.5 }, "rozdarcie")
+        .to(
+          lewa.current,
+          { xPercent: -110, rotation: -1.5, duration: 1.15, ease: "expo.inOut" },
+          "rozdarcie",
+        )
+        .to(
+          prawa.current,
+          { xPercent: 110, rotation: 1.5, duration: 1.15, ease: "expo.inOut" },
+          "rozdarcie",
+        )
+        .add(() => {
+          document.body.style.overflow = "";
+          oznaczStart();
+        }, "rozdarcie+=0.3")
+        .add(() => setAktywny(false));
 
-      const pokaz = cel >= 1 && biezacy > 0.995 ? 1 : biezacy;
-      setProcent(Math.round(pokaz * 100));
-      if (pasek.current) pasek.current.style.transform = `scaleX(${pokaz})`;
+      /* —— licznik: wolniejsze z dwóch (pobieranie vs upływ czasu) —— */
+      let biezacy = 0;
+      let raf = 0;
+      const poczatek = performance.now();
 
-      if (pokaz === 1) {
-        tl.play();
-        return;
-      }
+      const petla = () => {
+        const cel = Math.min(zrobione / wszystkie, (performance.now() - poczatek) / MIN_MS);
+        biezacy += (cel - biezacy) * 0.09;
+
+        const pokaz = cel >= 1 && biezacy > 0.995 ? 1 : biezacy;
+        setProcent(Math.round(pokaz * 100));
+        if (pasek.current) pasek.current.style.transform = `scaleX(${pokaz})`;
+
+        if (pokaz === 1) {
+          wyjscie.play();
+          return;
+        }
+        raf = requestAnimationFrame(petla);
+      };
       raf = requestAnimationFrame(petla);
-    };
-    raf = requestAnimationFrame(petla);
 
-    // Wyjście: błysk → rozdarcie → odsłonięcie strony
-    tl.to(tresc.current, { opacity: 0, scale: 1.12, duration: 0.26, ease: "power2.in", delay: 0.08 })
-      .to(root.current, { backgroundColor: site.kolory.akcent, duration: 0.07 }, "<0.08")
-      .to(root.current, { backgroundColor: "#050505", duration: 0.1 })
-      .to(lewa.current, { xPercent: -108, duration: 0.62, ease: "expo.inOut" }, "rozdarcie")
-      .to(prawa.current, { xPercent: 108, duration: 0.62, ease: "expo.inOut" }, "rozdarcie")
-      .add(() => {
-        document.body.style.overflow = "";
-        oznaczStart();
-      }, "rozdarcie+=0.15")
-      .add(() => setAktywny(false));
+      return () => cancelAnimationFrame(raf);
+    }, root);
 
     return () => {
-      cancelAnimationFrame(raf);
-      tl.kill();
+      ctx.revert();
       document.body.style.overflow = "";
     };
   }, []);
@@ -106,21 +157,33 @@ export default function Preloader() {
         style={{ clipPath: KLIP_PRAWA, WebkitClipPath: KLIP_PRAWA }}
       />
 
+      {/* rozświetlony szew w miejscu pęknięcia */}
+      <div
+        ref={szew}
+        className="pointer-events-none absolute inset-y-0 left-1/2 w-[3px] -translate-x-1/2 bg-huk-red opacity-0 shadow-neon-mocny"
+      />
+
       {/* czerwona łuna od dołu */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-1/2 bg-[radial-gradient(ellipse_at_bottom,color-mix(in_srgb,var(--akcent)_38%,transparent),transparent_70%)]" />
       <div className="halftone pointer-events-none absolute right-0 top-0 h-40 w-40 opacity-20" />
+      <div className="halftone pointer-events-none absolute bottom-0 left-0 h-40 w-40 opacity-20" />
 
       <div
         ref={tresc}
         className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-6"
       >
-        <p className="podtytul text-huk-red">wchodzisz na kanał</p>
+        <p ref={nad} className="podtytul text-huk-red">
+          wchodzisz na kanał
+        </p>
 
-        <h1 className="tekst-metal swiecacy-tekst text-center text-[clamp(3rem,16vw,11rem)] leading-none">
+        <h1
+          ref={logo}
+          className="tekst-metal swiecacy-tekst text-center text-[clamp(3rem,16vw,11rem)] leading-none"
+        >
           {site.nick}
         </h1>
 
-        <div className="w-full max-w-sm">
+        <div ref={dol} className="w-full max-w-sm">
           <div className="h-[3px] w-full overflow-hidden bg-white/10">
             <div
               ref={pasek}

@@ -10,17 +10,17 @@ export const site = {
   handle: "HUKSZYTV",
   tagline: "Streamy, które słychać",
   opis:
-    "Gram głośno, tnę szybko i nie udaję, że wiem co robię. Wpadaj na live — " +
-    "hałas, memy i horrory, przy których razem będziemy się bać.",
+    "Gram głośno, tnę szybko i nie udaję, że wiem co robię. " +
+    "Wpadaj na live po hałas, memy i horrory, przy których razem będziemy się bać.",
   bio: [
-    "Cześć, jestem HUKSZY. Streamuję trzy razy w tygodniu — od horrorów, przez sesje z widzami, po granie w rzeczy, których nikt mi nie polecał.",
-    "Kanał zbudowała społeczność, która przychodzi po głośny śmiech i zostaje na dłużej. Jeśli lubisz szybkie cięcia, jumpscare'y i autoironię — jesteś u siebie.",
+    "Cześć, jestem HUKSZY. Streamuję trzy razy w tygodniu: od horrorów, przez sesje z widzami, po granie w rzeczy, których nikt mi nie polecał.",
+    "Kanał zbudowała społeczność, która przychodzi po głośny śmiech i zostaje na dłużej. Jeśli lubisz szybkie cięcia, jumpscare'y i autoironię, jesteś u siebie.",
   ],
 
   /* ——— DOMENA / SEO ————————————————————————————————————— */
   url: "https://hukszy.pl", // ← podmień na docelową domenę
   seo: {
-    tytul: "HUKSZY — streamer, Twitch, klipy",
+    tytul: "HUKSZY | streamer, Twitch, klipy",
     opis:
       "Oficjalna strona streamera HUKSZY. Harmonogram streamów, najlepsze klipy, " +
       "Discord i social media. Live na twitch.tv/hukszy.",
@@ -44,7 +44,7 @@ export const site = {
   live: {
     mock: true,
     czyLive: false,
-    tytulStreamu: "Horrory z widzami — kto pierwszy krzyknie",
+    tytulStreamu: "Horrory z widzami: kto pierwszy krzyknie",
     gra: "Phasmophobia",
   },
 
@@ -55,6 +55,13 @@ export const site = {
      od wyniku. Poniżej 768 px scena wtedy też się załaduje.              */
   wydajnosc: {
     scena3DnaMobile: false,
+    /** Ile trwa faza licznika w intro (ms), zanim kurtyna się rozedrze.
+     *  Przez ten czas strona jest zasłonięta, więc każda sekunda idzie
+     *  wprost w metrykę LCP. Zmierzone: 2600 ms na telefonie zbija
+     *  Lighthouse performance z ~92 na ~74, dlatego telefon dostaje
+     *  krótszą wersję. Chcesz pełne intro wszędzie? Zrównaj obie liczby. */
+    dlugoscIntroMs: 2600,
+    dlugoscIntroMobileMs: 900,
     /** Poniżej tej szerokości scena 3D się nie ładuje (px). */
     prog3D: 768,
   },
@@ -107,7 +114,9 @@ export const site = {
     logo: "/assets/logo/logo.svg",
     logoPng: "/assets/logo/logo.png",
     tloHero: "/assets/tlo/tlo-hero.jpg",
-    portret: "/assets/postac/portret.png",
+    /** Zdjęcie do sekcji „O mnie". Puste = pokazuje się sam kadr z sygnetem.
+     *  Wgraj plik do /public/assets/postac i wpisz tu ścieżkę. */
+    portret: "",
     og: "/assets/og/og.jpg",
     panele: {
       discord: "/assets/social/panel-discord.jpg",

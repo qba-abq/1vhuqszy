@@ -194,7 +194,7 @@ export default function Hero() {
           data-wejscie
           className="mt-4 max-w-xl text-balance text-sm leading-relaxed text-white/75 [text-shadow:0_2px_18px_#000,0_0_40px_#000] sm:mt-6 sm:text-base"
         >
-          {site.tagline} — {site.opis}
+          {site.opis}
         </p>
 
         <div data-wejscie className="mt-6 sm:mt-8">

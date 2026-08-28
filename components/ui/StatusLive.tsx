@@ -40,7 +40,7 @@ export default function StatusLive({ klasa = "" }: { klasa?: string }) {
 
       {czyLive && (
         <span className="hidden max-w-[38ch] truncate border-l border-white/15 pl-3 text-xs text-white/60 sm:inline">
-          {gra} — {tytulStreamu}
+          {gra} · {tytulStreamu}
         </span>
       )}
     </div>

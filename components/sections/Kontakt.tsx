@@ -90,7 +90,7 @@ export default function Kontakt() {
             <div>
               <h3 className="font-display text-2xl text-huk-white sm:text-3xl">Wesprzyj kanał</h3>
               <p className="mt-1 max-w-md text-xs leading-relaxed text-white/65 sm:text-sm">
-                Sprzęt, gry i lepsze streamy — każda złotówka wraca do was w jakości.
+                Sprzęt, gry i lepsze streamy. Każda złotówka wraca do was w jakości.
               </p>
             </div>
           </div>
@@ -116,7 +116,7 @@ export default function Kontakt() {
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <span className="tekst-metal font-display text-2xl leading-none">{site.nick}</span>
           <p className="text-center text-[0.65rem] uppercase tracking-[0.18em] text-white/55">
-            © {new Date().getFullYear()} {site.handle} — wszystkie prawa zastrzeżone
+            © {new Date().getFullYear()} {site.handle} · wszystkie prawa zastrzeżone
           </p>
           <div className="flex gap-4">
             {KANALY.map(({ nazwa, href, Ikona }) => (
