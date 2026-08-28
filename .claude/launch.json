@@ -4,8 +4,9 @@
     {
       "name": "hukszy-dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["--prefix", "C:/Users/48794/Downloads/hukszy", "run", "dev", "--", "-p", "3100"],
-      "port": 3100
+      "runtimeArgs": ["--prefix", "C:/Users/48794/Downloads/hukszy", "run", "dev"],
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }
