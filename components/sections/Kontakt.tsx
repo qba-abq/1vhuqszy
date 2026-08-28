@@ -44,7 +44,7 @@ export default function Kontakt() {
     <section
       ref={sekcja}
       id="kontakt"
-      className="relative overflow-hidden bg-huk-black px-6 pb-0 pt-24 sm:pt-32"
+      className="relative overflow-hidden bg-huk-black/60 px-6 pb-0 pt-24 sm:pt-32"
       aria-label="Social media i kontakt"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-huk-red/60 to-transparent" />

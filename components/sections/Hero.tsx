@@ -146,7 +146,7 @@ export default function Hero() {
     <section
       ref={sekcja}
       id="hero"
-      className="relative h-dvh w-full overflow-hidden bg-huk-ink"
+      className="relative h-dvh w-full overflow-hidden"
       aria-label="Strona główna"
     >
       {/* ——— warstwa tła ——— */}

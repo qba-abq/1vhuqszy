@@ -35,7 +35,9 @@ Next.js 16 (App Router) · TypeScript · Tailwind 4 · React Three Fiber + drei 
 
 ## Sekcje
 
-1. **Preloader** — licznik %, rozdarcie kurtyny (raz na sesję)
+0. **Żywe tło** — pioruny/korzenie rosnące w dół razem ze scrollem, losowe błyski
+   wyładowań z poblaskiem ekranu i dryfujące odłamki 3D przez całą stronę
+1. **Preloader** — licznik %, litery logo wchodzące pojedynczo, rozdarcie kurtyny (raz na sesję)
 2. **Hero** — scena 3D reagująca na kursor i scroll, status live/offline, CTA
 3. **O mnie** — kadr na zdjęcie, bio z maskami tekstowymi, pas animowanych liczników
 4. **Harmonogram** — lista streamów (dzień, godziny, kategoria), znaczniki „dziś" i „najbliższy", dni wolne w jednej linijce
@@ -46,8 +48,8 @@ Next.js 16 (App Router) · TypeScript · Tailwind 4 · React Three Fiber + drei 
 
 Zmierzone Lighthouse na buildzie produkcyjnym (`npm run build && npm start`):
 
-- **Desktop:** performance 97, accessibility 100, best practices 100, SEO 100
-- **Mobile:** performance 91, accessibility 100, best practices 100, SEO 100
+- **Desktop:** performance 99, accessibility 100, best practices 100, SEO 100
+- **Mobile:** performance 85-89 (3 przebiegi), accessibility 100, best practices 100, SEO 100
 
 Decyzje, które to umożliwiły — nie zmieniaj ich bez pomiaru:
 
@@ -62,6 +64,8 @@ Decyzje, które to umożliwiły — nie zmieniaj ich bez pomiaru:
   i `dlugoscIntroMobileMs`). Przez czas intro strona jest zasłonięta, więc na
   telefonie pełna wersja zbijała performance z ~91 do ~74.
 - **Wejście z linku do sekcji** (np. `/#harmonogram`) pomija intro.
+- **Tło na telefonie jest czysto CSS-owe** (pętla rysowania piorunów bez JS);
+  scroll-scrub, błyski GSAP i warstwa 3D tła działają tylko od 768 px wzwyż.
 
 ## Status live
 

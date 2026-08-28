@@ -29,7 +29,7 @@ export default function OMnie() {
     <section
       ref={sekcja}
       id="o-mnie"
-      className="relative overflow-hidden bg-huk-ink px-6 py-24 sm:py-32"
+      className="relative overflow-hidden bg-huk-ink/60 px-6 py-24 sm:py-32"
       aria-label="O mnie"
     >
       {/* czerwona łuna z lewej + rastr */}

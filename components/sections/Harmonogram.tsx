@@ -64,7 +64,7 @@ export default function Harmonogram() {
     <section
       ref={sekcja}
       id="harmonogram"
-      className="relative overflow-hidden bg-huk-black px-6 py-24 sm:py-32"
+      className="relative overflow-hidden bg-huk-black/60 px-6 py-24 sm:py-32"
       aria-label="Harmonogram streamów"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-huk-red/60 to-transparent" />

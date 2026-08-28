@@ -33,7 +33,7 @@ export default function Highlights() {
     <section
       ref={sekcja}
       id="klipy"
-      className="relative overflow-hidden bg-huk-ink px-6 py-24 sm:py-32"
+      className="relative overflow-hidden bg-huk-ink/60 px-6 py-24 sm:py-32"
       aria-label="Najlepsze klipy"
     >
       <div className="halftone pointer-events-none absolute left-8 top-16 h-32 w-32 opacity-15" />

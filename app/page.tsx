@@ -1,4 +1,6 @@
 import Preloader from "@/components/Preloader";
+import TloZywe from "@/components/TloZywe";
+import Nawigacja from "@/components/Nawigacja";
 import Hero from "@/components/sections/Hero";
 import OMnie from "@/components/sections/OMnie";
 import Harmonogram from "@/components/sections/Harmonogram";
@@ -9,7 +11,9 @@ export default function Home() {
   return (
     <>
       <Preloader />
-      <main>
+      <TloZywe />
+      <Nawigacja />
+      <main className="relative z-10">
         <Hero />
         <OMnie />
         <Harmonogram />

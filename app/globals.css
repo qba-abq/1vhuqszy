@@ -172,6 +172,84 @@
   padding-bottom: 0.08em;
 }
 
+/* ——— żywe tło strony ——————————————————————————————————— */
+
+/* poświata schodząca w dół w kółko: sam transform, więc kosztuje tyle co nic */
+@keyframes peleza {
+  0% {
+    transform: translateY(-45vh);
+    opacity: 0;
+  }
+  12% {
+    opacity: 1;
+  }
+  88% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+/* nierówne miganie wyładowania */
+@keyframes miganie {
+  0%,
+  100% {
+    opacity: 0.9;
+  }
+  43% {
+    opacity: 0.72;
+  }
+  47% {
+    opacity: 1;
+  }
+  52% {
+    opacity: 0.6;
+  }
+  56% {
+    opacity: 0.95;
+  }
+}
+
+.tlo-peleza {
+  animation: peleza 11s linear infinite;
+  will-change: transform;
+}
+
+.tlo-miga {
+  animation: miganie 4.5s ease-in-out infinite;
+}
+
+/* telefon: rysowanie piorunow petla CSS, zero JS na scrollu.
+   Dashoffset 1 -> -1: linia najpierw rosnie w dol, potem splywa dalej. */
+@keyframes rysuj-piorun {
+  0% {
+    stroke-dashoffset: 1;
+  }
+  55% {
+    stroke-dashoffset: 0;
+  }
+  100% {
+    stroke-dashoffset: -1;
+  }
+}
+
+.tlo-rysuj path {
+  animation: rysuj-piorun 12s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tlo-peleza,
+  .tlo-miga {
+    animation: none !important;
+  }
+  .tlo-peleza {
+    opacity: 0.5;
+    transform: translateY(30vh);
+  }
+}
+
 /* ===========================================================
    REDUCED MOTION — twardy wyłącznik ruchu
    =========================================================== */
