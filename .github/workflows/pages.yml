@@ -1,4 +1,5 @@
 # Buduje strone i publikuje ja na GitHub Pages po kazdym pushu na master.
+# Deploy = push katalogu out/ na galaz gh-pages, ktora Pages serwuje.
 # Adres: https://qba-abq.github.io/1vhuqszy/
 name: Deploy na GitHub Pages
 
@@ -8,16 +9,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
   group: pages
   cancel-in-progress: true
 
 jobs:
-  build:
+  build-i-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -38,21 +37,9 @@ jobs:
       - name: Wylacz Jekylla (katalogi _next musza przejsc)
         run: touch out/.nojekyll
 
-      - name: Wlacz Pages w repo
-        uses: actions/configure-pages@v5
+      - name: Publikacja na gh-pages
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          enablement: true
-
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: out
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          force_orphan: true
