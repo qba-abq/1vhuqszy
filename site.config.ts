@@ -54,14 +54,14 @@ export const site = {
      bo nie ma kursora. Ustaw `scena3DnaMobile: true`, jeśli wolisz efekt
      od wyniku. Poniżej 768 px scena wtedy też się załaduje.              */
   wydajnosc: {
-    scena3DnaMobile: false,
+    scena3DnaMobile: true,
     /** Ile trwa faza licznika w intro (ms), zanim kurtyna się rozedrze.
      *  Przez ten czas strona jest zasłonięta, więc każda sekunda idzie
-     *  wprost w metrykę LCP. Zmierzone: 2600 ms na telefonie zbija
-     *  Lighthouse performance z ~92 na ~74, dlatego telefon dostaje
-     *  krótszą wersję. Chcesz pełne intro wszędzie? Zrównaj obie liczby. */
+     *  wprost w metrykę LCP (dłuższe intro = niższy wynik Lighthouse
+     *  na telefonie). Decyzja Jakuba 2026-08-29: telefon ma być 1:1
+     *  z desktopem, stąd obie wartości równe. */
     dlugoscIntroMs: 2600,
-    dlugoscIntroMobileMs: 900,
+    dlugoscIntroMobileMs: 2600,
     /** Poniżej tej szerokości scena 3D się nie ładuje (px). */
     prog3D: 768,
   },

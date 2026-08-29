@@ -221,24 +221,6 @@
   animation: miganie 4.5s ease-in-out infinite;
 }
 
-/* telefon: rysowanie piorunow petla CSS, zero JS na scrollu.
-   Dashoffset 1 -> -1: linia najpierw rosnie w dol, potem splywa dalej. */
-@keyframes rysuj-piorun {
-  0% {
-    stroke-dashoffset: 1;
-  }
-  55% {
-    stroke-dashoffset: 0;
-  }
-  100% {
-    stroke-dashoffset: -1;
-  }
-}
-
-.tlo-rysuj path {
-  animation: rysuj-piorun 12s linear infinite;
-}
-
 @media (prefers-reduced-motion: reduce) {
   .tlo-peleza,
   .tlo-miga {

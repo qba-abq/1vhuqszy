@@ -73,7 +73,7 @@ export default function Preloader() {
         .from(dol.current, { opacity: 0, y: 18, duration: 0.6, ease: "power2.out" }, "-=0.45");
 
       /* —— 2. wyjście: drganie, błysk, rozdarcie —— */
-      const wyjscie = gsap.timeline({ paused: true, timeScale: naTelefonie ? 1.9 : 1 });
+      const wyjscie = gsap.timeline({ paused: true });
       wyjscie
         // krótkie drganie „zaraz pęknie"
         .to(tresc.current, {

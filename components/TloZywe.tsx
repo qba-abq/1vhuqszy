@@ -6,18 +6,19 @@ import { gsap } from "@/lib/animacje";
 import { stanTla } from "@/lib/stanTla";
 import { ruchOgraniczony } from "@/lib/useRuchDozwolony";
 
-/** Pełnostronicowa scena 3D dociągana leniwie (desktop). */
+/** Pełnostronicowa scena 3D dociągana leniwie po bezczynności. */
 const TloScena = dynamic(() => import("@/components/three/TloScena"), {
   ssr: false,
   loading: () => null,
 });
 
 /**
- * Żywe tło całej strony:
- * - pioruny/korzenie rosnące w dół razem ze scrollem (desktop: GSAP scrub;
- *   telefon: pętla CSS bez żadnego JS),
+ * Żywe tło całej strony, identyczne na desktopie i telefonie (1:1):
+ * - pioruny/korzenie rosnące w dół razem ze scrollem (GSAP scrub),
  * - losowe BŁYSKI pojedynczych wyładowań + rozbłysk ekranu,
- * - dryfujące odłamki 3D przez całą stronę (desktop).
+ * - dryfujące odłamki 3D przez całą stronę.
+ * Jedyne różnice na telefonie: 3 pioruny zamiast 4 (węższy ekran)
+ * i mniej cząsteczek w hero — gęstość, nie obecność efektów.
  */
 
 function losowacz(ziarno: number) {
@@ -84,13 +85,13 @@ export default function TloZywe() {
   }, []);
 
   const sciezki = useMemo(
-    () => zbudujSiec(20260828, desktop === false ? 2 : 4),
+    () => zbudujSiec(20260828, desktop === false ? 3 : 4),
     [desktop],
   );
 
-  /* —— pełnostronicowa scena 3D: desktop, po bezczynności —— */
+  /* —— pełnostronicowa scena 3D: po bezczynności (desktop i telefon) —— */
   useEffect(() => {
-    if (!desktop || ruchOgraniczony()) return;
+    if (desktop === null || ruchOgraniczony()) return;
     const nav = navigator as Navigator & {
       deviceMemory?: number;
       connection?: { saveData?: boolean };
@@ -112,7 +113,7 @@ export default function TloZywe() {
 
   /* —— stan scrolla/myszy dla parallaxu 3D —— */
   useEffect(() => {
-    if (!desktop || ruchOgraniczony()) return;
+    if (ruchOgraniczony()) return;
 
     const naScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
@@ -131,7 +132,7 @@ export default function TloZywe() {
     };
   }, [desktop]);
 
-  /* —— desktop: rysunek scrubowany scrollem + losowe błyski —— */
+  /* —— rysunek scrubowany scrollem + losowe błyski (1:1 na telefonie) —— */
   useEffect(() => {
     const el = svg.current;
     if (!el || desktop === null) return;
@@ -143,9 +144,6 @@ export default function TloZywe() {
       gsap.set(wszystkie, { strokeDashoffset: 0 });
       return;
     }
-
-    // Telefon: rysowaniem zajmuje się pętla CSS (zero JS na scrollu).
-    if (!desktop) return;
 
     const ctx = gsap.context(() => {
       gsap.set(wszystkie, { strokeDashoffset: 0.84 });
@@ -213,7 +211,7 @@ export default function TloZywe() {
 
       <svg
         ref={svg}
-        className={`tlo-miga absolute inset-0 h-full w-full ${desktop === false ? "tlo-rysuj" : ""}`}
+        className="tlo-miga absolute inset-0 h-full w-full"
         viewBox="0 0 100 100"
         preserveAspectRatio="none"
       >

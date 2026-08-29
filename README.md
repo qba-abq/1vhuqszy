@@ -53,16 +53,17 @@ Zmierzone Lighthouse na buildzie produkcyjnym (`npm run build && npm start`):
 
 Decyzje, które to umożliwiły — nie zmieniaj ich bez pomiaru:
 
-- **Scena 3D nie ładuje się poniżej 768 px** ani na słabym sprzęcie (`hardwareConcurrency <= 2`,
-  `deviceMemory < 2`, `saveData`). Na desktopie dociąga się dopiero w bezczynności po `load`.
-  Przełącznik: `site.config.ts` → `wydajnosc`.
+- **Sceny 3D ładują się też na telefonie** (decyzja: mobile 1:1 z desktopem,
+  kosztem wyniku Lighthouse). Wyjątek: bardzo słaby sprzęt (`hardwareConcurrency <= 2`,
+  `deviceMemory < 2`, `saveData`) — tam 3D odpuszcza. Wszystko dociąga się
+  w bezczynności po `load`. Przełącznik: `site.config.ts` → `wydajnosc`.
 - **Nagłówek z nickiem w hero nie jest animowany.** To element LCP — animowanie go
   (opacity / scale / filter) przesuwało metrykę o ~3 s na telefonie.
 - **`prefers-reduced-motion`** wyłącza Lenisa, wejścia GSAP, liczniki, przechył kart i intro;
   scena 3D renderuje jedną klatkę.
-- **Intro trwa dłużej na desktopie niż na telefonie** (`wydajnosc.dlugoscIntroMs`
-  i `dlugoscIntroMobileMs`). Przez czas intro strona jest zasłonięta, więc na
-  telefonie pełna wersja zbijała performance z ~91 do ~74.
+- **Intro trwa tyle samo na desktopie i telefonie** (`wydajnosc.dlugoscIntroMs`
+  = `dlugoscIntroMobileMs`; mobile 1:1). Przez czas intro strona jest zasłonięta,
+  co na telefonie kosztuje kilkanaście punktów performance.
 - **Wejście z linku do sekcji** (np. `/#harmonogram`) pomija intro.
 - **Tło na telefonie jest czysto CSS-owe** (pętla rysowania piorunów bez JS);
   scroll-scrub, błyski GSAP i warstwa 3D tła działają tylko od 768 px wzwyż.
