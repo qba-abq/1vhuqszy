@@ -3,12 +3,19 @@
 import { useEffect, useRef } from "react";
 import Image from "next/image";
 import { site } from "@/site.config";
-import { gsap, animujWejscie, paralaksa } from "@/lib/animacje";
+import { gsap, ScrollTrigger, animujWejscie, paralaksa } from "@/lib/animacje";
 import NaglowekSekcji from "@/components/ui/NaglowekSekcji";
 import { IkonaPlay } from "@/components/ui/Ikony";
 
 const SKOS =
   "polygon(18px 0, 100% 0, 100% calc(100% - 18px), calc(100% - 18px) 100%, 0 100%, 0 18px)";
+
+/** Pozycja kursora -> zmienne CSS --sx/--sy czytane przez .spotlight. */
+function ustawSwiatlo(e: React.PointerEvent<HTMLElement>) {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--sx", `${e.clientX - r.left}px`);
+  e.currentTarget.style.setProperty("--sy", `${e.clientY - r.top}px`);
+}
 
 export default function Highlights() {
   const sekcja = useRef<HTMLElement>(null);
@@ -23,6 +30,28 @@ export default function Highlights() {
       // każdy kafelek płynie z inną prędkością — stąd wrażenie głębi
       gsap.utils.toArray<HTMLElement>("[data-parallax]").forEach((kafel, i) => {
         paralaksa(kafel.querySelector("[data-obraz]"), 0.1 + (i % 3) * 0.06, kafel);
+      });
+
+      // szybki scroll lekko pochyla siatkę — czuć pęd (klasyk awwwards)
+      const skewSet = gsap.quickSetter("[data-klip]", "skewY", "deg");
+      const proxy = { skew: 0 };
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top bottom",
+        end: "bottom top",
+        onUpdate: (self) => {
+          const skew = gsap.utils.clamp(-4, 4, self.getVelocity() / -350);
+          if (Math.abs(skew) > Math.abs(proxy.skew)) {
+            proxy.skew = skew;
+            gsap.to(proxy, {
+              skew: 0,
+              duration: 0.7,
+              ease: "power3.out",
+              overwrite: true,
+              onUpdate: () => skewSet(proxy.skew),
+            });
+          }
+        },
       });
     }, el);
 
@@ -52,7 +81,8 @@ export default function Highlights() {
                   {...(klip.link
                     ? { href: klip.link, target: "_blank", rel: "noopener noreferrer" }
                     : {})}
-                  className="group relative block aspect-video overflow-hidden border border-white/10 transition-colors duration-300 hover:border-huk-red/70"
+                  onPointerMove={ustawSwiatlo}
+                  className="spotlight group relative block aspect-video overflow-hidden border border-white/10 transition-colors duration-300 hover:border-huk-red/70"
                   style={{ clipPath: SKOS }}
                 >
                   <div data-obraz className="absolute inset-0 scale-[1.18]">

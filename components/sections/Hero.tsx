@@ -99,6 +99,21 @@ export default function Hero() {
     return () => ctx.revert();
   }, []);
 
+  /* —— glitch tytułu: krótkie serie co kilka sekund —— */
+  useEffect(() => {
+    const el = nick.current;
+    if (!el || ruchOgraniczony()) return;
+
+    let timer = 0;
+    const seria = () => {
+      el.classList.add("glitch-on");
+      window.setTimeout(() => el.classList.remove("glitch-on"), 280 + Math.random() * 260);
+      timer = window.setTimeout(seria, 2600 + Math.random() * 3200);
+    };
+    timer = window.setTimeout(seria, 1800);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   /* —— scroll: przypięcie sekcji + parallaks warstw + postęp sceny 3D —— */
   useEffect(() => {
     const el = sekcja.current;
@@ -185,7 +200,8 @@ export default function Hero() {
 
         <h1
           ref={nick}
-          className="tekst-metal swiecacy-tekst text-[clamp(3.5rem,17vw,15rem)] leading-[0.85]"
+          data-tekst={site.nick}
+          className="glitch tekst-metal swiecacy-tekst text-[clamp(3.5rem,17vw,15rem)] leading-[0.85]"
         >
           {site.nick}
         </h1>

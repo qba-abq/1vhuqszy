@@ -1,4 +1,9 @@
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
+import { gsap } from "@/lib/animacje";
+import { ruchOgraniczony } from "@/lib/useRuchDozwolony";
 
 type Props = {
   href: string;
@@ -10,7 +15,10 @@ type Props = {
 
 const SKOS = "polygon(14px 0, 100% 0, 100% calc(100% - 14px), calc(100% - 14px) 100%, 0 100%, 0 14px)";
 
-/** Przycisk w stylu paneli kanału: ścięte rogi, czerwień, strzałki. */
+/**
+ * Przycisk w stylu paneli kanału: ścięte rogi, czerwień, strzałki.
+ * Na myszce jest „magnetyczny": lekko ciągnie się do kursora.
+ */
 export default function PrzyciskCTA({
   href,
   children,
@@ -18,6 +26,24 @@ export default function PrzyciskCTA({
   zewnetrzny = true,
   klasa = "",
 }: Props) {
+  const el = useRef<HTMLAnchorElement>(null);
+
+  const przyciagnij = (e: React.PointerEvent) => {
+    const a = el.current;
+    if (!a || e.pointerType !== "mouse" || ruchOgraniczony()) return;
+    const r = a.getBoundingClientRect();
+    gsap.to(a, {
+      x: (e.clientX - r.left - r.width / 2) * 0.28,
+      y: (e.clientY - r.top - r.height / 2) * 0.34,
+      duration: 0.4,
+      ease: "power2.out",
+    });
+  };
+
+  const pusc = () => {
+    if (el.current) gsap.to(el.current, { x: 0, y: 0, duration: 0.55, ease: "elastic.out(1,0.55)" });
+  };
+
   const bazowe =
     "group relative inline-flex items-center gap-3 px-7 py-4 font-sans text-sm font-extrabold uppercase tracking-[0.18em] transition-all duration-300 will-change-transform";
 
@@ -28,6 +54,9 @@ export default function PrzyciskCTA({
 
   return (
     <Link
+      ref={el}
+      onPointerMove={przyciagnij}
+      onPointerLeave={pusc}
       href={href}
       target={zewnetrzny ? "_blank" : undefined}
       rel={zewnetrzny ? "noopener noreferrer" : undefined}

@@ -22,6 +22,13 @@ function dlugosc(od: string, doG: string) {
   return `${String(godziny).replace(".", ",")} h`;
 }
 
+/** Pozycja kursora -> zmienne CSS --sx/--sy czytane przez .spotlight. */
+function ustawSwiatlo(e: React.PointerEvent<HTMLElement>) {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--sx", `${e.clientX - r.left}px`);
+  e.currentTarget.style.setProperty("--sy", `${e.clientY - r.top}px`);
+}
+
 export default function Harmonogram() {
   const sekcja = useRef<HTMLElement>(null);
   // liczone po montażu — SSR i klient mogłyby być w różnych dobach
@@ -84,7 +91,8 @@ export default function Harmonogram() {
             return (
               <li key={d.skrot} data-wiersz style={{ opacity: 0 }}>
                 <article
-                  className={`group relative flex items-center gap-4 border-y border-r bg-gradient-to-r py-5 pl-5 pr-4 transition-all duration-300 sm:gap-7 sm:pl-7 ${
+                  onPointerMove={ustawSwiatlo}
+                  className={`spotlight group relative flex items-center gap-4 border-y border-r bg-gradient-to-r py-5 pl-5 pr-4 transition-all duration-300 sm:gap-7 sm:pl-7 ${
                     dzisiaj
                       ? "border-huk-red/45 from-huk-red/[0.14] to-transparent"
                       : "border-white/8 from-white/[0.035] to-transparent hover:border-huk-red/35 hover:from-huk-red/[0.09]"
