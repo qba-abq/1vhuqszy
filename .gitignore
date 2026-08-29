@@ -44,3 +44,8 @@ next-env.d.ts
 *.mp4
 *.mov
 /grafiki-oryginaly
+
+.vercel
+
+# eksport statyczny (Pages buduje go w Actions)
+/out/

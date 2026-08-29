@@ -1,6 +1,9 @@
 import { ImageResponse } from "next/og";
 import { site } from "@/site.config";
 
+// Wymagane przy output: "export" — obrazek generuje się raz, podczas builda.
+export const dynamic = "force-static";
+
 export const alt = site.seo.tytul;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

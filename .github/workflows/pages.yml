@@ -1,0 +1,58 @@
+# Buduje strone i publikuje ja na GitHub Pages po kazdym pushu na master.
+# Adres: https://qba-abq.github.io/1vhuqszy/
+name: Deploy na GitHub Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Zaleznosci
+        run: npm ci
+
+      - name: Build (eksport statyczny)
+        run: npm run build
+        env:
+          DEPLOY_BASE: /1vhuqszy
+
+      - name: Wylacz Jekylla (katalogi _next musza przejsc)
+        run: touch out/.nojekyll
+
+      - name: Wlacz Pages w repo
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: out
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
