@@ -101,12 +101,12 @@ export const site = {
   /* ——— HIGHLIGHTS / KLIPY ————————————————————————————————
      miniatura: podmień plik w /public/assets/klipy (16:9, 1280×720) */
   klipy: [
-    { id: "klip-1", tytul: "Biped z Kimusią, czyli dwie nogi za dużo", opis: "Biped · kolab", miniatura: "/assets/klipy/klip-1.png", link: "https://www.twitch.tv/hukszy/videos" },
-    { id: "klip-2", tytul: "4 osoby w kuchni, ale to nie MasterChef", opis: "Overcooked! 2", miniatura: "/assets/klipy/klip-2.png", link: "https://www.twitch.tv/hukszy/videos" },
-    { id: "klip-3", tytul: "100 follow = habanero na żywo", opis: "Challenge 🌶️", miniatura: "/assets/klipy/klip-3.png", link: "https://www.twitch.tv/hukszy" },
-    { id: "klip-4", tytul: "Jumpscare za jumpscare'em", opis: "Jumpscare Scare Jump", miniatura: "/assets/klipy/klip-4.png", link: "https://www.twitch.tv/hukszy/videos" },
-    { id: "klip-5", tytul: "Nocna zmiana, której nie przeżyłem", opis: "The Night Shift · Kick", miniatura: "/assets/klipy/klip-5.png", link: "https://kick.com/hukszy" },
-    { id: "klip-6", tytul: "Kameleon szybszy niż mój refleks", opis: "Meccha Chameleon · Kick", miniatura: "/assets/klipy/klip-6.png", link: "https://kick.com/hukszy" },
+    { id: "vod-biped", tytul: "Biped z Kimusią", opis: "Biped · kolab", miniatura: "/assets/klipy/vod-biped.jpg", link: "https://www.twitch.tv/videos/2856077335" },
+    { id: "vod-overcooked", tytul: "4 osoby w kuchni, ale to nie MasterChef", opis: "Overcooked! 2", miniatura: "/assets/klipy/vod-overcooked.jpg", link: "https://www.twitch.tv/videos/2853548143" },
+    { id: "vod-jumpscare", tytul: "Jumpscare za jumpscare'em", opis: "Jumpscare Scare Jump", miniatura: "/assets/klipy/vod-jumpscare.jpg", link: "https://www.twitch.tv/videos/2852578308" },
+    { id: "vod-letsfib", tytul: "Let's fib: 100 follow = habanero", opis: "Challenge 🌶️", miniatura: "/assets/klipy/vod-letsfib.jpg", link: "https://www.twitch.tv/videos/2849663644" },
+    { id: "vod-impreza", tytul: "Impreza maszynowa, zapraszam", opis: "Live", miniatura: "/assets/klipy/vod-impreza.jpg", link: "https://www.twitch.tv/videos/2847130291" },
+    { id: "vod-kick", tytul: "Biped z Kimusią na Kicku", opis: "Kick · multistream", miniatura: "/assets/klipy/vod-kick-biped.webp", link: "https://kick.com/hukszy/videos" },
   ],
 
   /* ——— SKLEP / MERCH ————————————————————————————————————
@@ -128,12 +128,13 @@ export const site = {
   /* ——— ŚCIEŻKI DO GRAFIK ————————————————————————————————
      Pełna lista wymaganych plików: /public/assets/README.md        */
   assety: {
-    logo: "/assets/logo/logo.svg",
-    logoPng: "/assets/logo/logo.png",
+    /** Prawdziwe grafiki kanału (pobrane z Twitcha). */
+    logoBaner: "/assets/tlo/baner-twitch.png",
+    awatar: "/assets/postac/avatar-twitch.png",
     tloHero: "/assets/tlo/tlo-hero.jpg",
     /** Zdjęcie do sekcji „O mnie". Puste = pokazuje się sam kadr z sygnetem.
      *  Wgraj plik do /public/assets/postac i wpisz tu ścieżkę. */
-    portret: "",
+    portret: "",  // puste = kadr pokazuje awatar kanału
     og: "/assets/og/og.jpg",
     panele: {
       discord: "/assets/social/panel-discord.jpg",

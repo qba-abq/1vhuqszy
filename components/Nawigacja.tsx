@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { site } from "@/site.config";
 import { gsap, ScrollTrigger } from "@/lib/animacje";
 
@@ -60,10 +61,17 @@ export default function Nawigacja() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
         <Link
           href="#hero"
-          className="tekst-metal font-display text-xl leading-none sm:text-2xl"
+          className="flex items-center gap-2.5"
           aria-label={`${site.nick} — początek strony`}
         >
-          {site.nick}
+          <Image
+            src={site.assety.awatar}
+            alt=""
+            width={34}
+            height={34}
+            className="rounded-full border border-huk-red/60"
+          />
+          <span className="tekst-metal font-display text-xl leading-none sm:text-2xl">{site.nick}</span>
         </Link>
 
         <ul className="hidden items-center gap-7 md:flex">

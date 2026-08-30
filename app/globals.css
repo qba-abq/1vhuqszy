@@ -273,6 +273,41 @@
   100% { clip-path: polygon(0 55%, 100% 55%, 100% 78%, 0 78%); transform: translate(-0.035em, -0.015em); }
 }
 
+/* logotyp-baner: winieta maskujaca krawedzie prostokata */
+.logo-baner {
+  -webkit-mask-image: radial-gradient(ellipse 72% 62% at center, #000 52%, transparent 74%);
+  mask-image: radial-gradient(ellipse 72% 62% at center, #000 52%, transparent 74%);
+}
+
+/* glitch logotypu-obrazu: dwie kopie tnace sie wycinkami */
+.glitch-kopia {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: auto;
+  opacity: 0;
+  pointer-events: none;
+}
+.glitch-on .glitch-kopia-a {
+  opacity: 0.9;
+  transform: translate(-0.6%, -0.8%);
+  filter: drop-shadow(0 0 8px var(--akcent));
+  clip-path: polygon(0 8%, 100% 8%, 100% 34%, 0 34%);
+  animation: glitch-tnij-a 0.32s steps(3) infinite;
+}
+.glitch-on .glitch-kopia-b {
+  opacity: 0.85;
+  transform: translate(0.6%, 0.8%);
+  clip-path: polygon(0 62%, 100% 62%, 100% 86%, 0 86%);
+  animation: glitch-tnij-b 0.28s steps(2) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .glitch-kopia {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+}
+
 /* ——— efekt WOW: wlasny kursor (tylko pointer: fine) ——————— */
 @media (pointer: fine) {
   body.ma-kursor,

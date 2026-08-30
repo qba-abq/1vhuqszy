@@ -47,15 +47,17 @@ export default function KadrPortretu() {
             className="object-cover object-top"
           />
         ) : (
-          /* bez zdjęcia: sygnet zamiast pustki */
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-4">
-            <span
-              className="font-display text-[10rem] leading-none text-transparent"
-              style={{ WebkitTextStroke: "2px color-mix(in srgb, var(--akcent) 55%, transparent)" }}
-              aria-hidden="true"
-            >
-              H
-            </span>
+          /* bez zdjęcia: prawdziwy awatar kanału */
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-5">
+            <div className="relative h-44 w-44 overflow-hidden rounded-full border-2 border-huk-red/70 shadow-neon sm:h-52 sm:w-52">
+              <Image
+                src={site.assety.awatar}
+                alt={`Awatar kanału ${site.nick}`}
+                fill
+                sizes="208px"
+                className="object-cover"
+              />
+            </div>
             <span className="podtytul text-white/60">{site.handle}</span>
           </div>
         )}

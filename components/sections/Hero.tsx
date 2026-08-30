@@ -198,12 +198,22 @@ export default function Hero() {
           <span className="linia-akcent h-px w-10 sm:w-16" />
         </div>
 
-        <h1
-          ref={nick}
-          data-tekst={site.nick}
-          className="glitch tekst-metal swiecacy-tekst text-[clamp(3.5rem,17vw,15rem)] leading-[0.85]"
-        >
-          {site.nick}
+        {/* Prawdziwy logotyp kanału (baner z Twitcha); h1 zostaje dla SEO. */}
+        <h1 ref={nick} className="glitch-logo relative w-[min(88vw,760px)]">
+          <span className="sr-only">{site.nick}</span>
+          <Image
+            src={site.assety.logoBaner}
+            alt=""
+            width={1201}
+            height={480}
+            priority
+            sizes="(max-width: 800px) 88vw, 760px"
+            className="logo-baner h-auto w-full drop-shadow-[0_0_38px_rgba(225,6,0,0.45)]"
+          />
+          <Image aria-hidden src={site.assety.logoBaner} alt="" width={1201} height={480}
+            sizes="(max-width: 800px) 88vw, 760px" className="logo-baner glitch-kopia glitch-kopia-a" />
+          <Image aria-hidden src={site.assety.logoBaner} alt="" width={1201} height={480}
+            sizes="(max-width: 800px) 88vw, 760px" className="logo-baner glitch-kopia glitch-kopia-b" />
         </h1>
 
         <p

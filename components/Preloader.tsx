@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { site } from "@/site.config";
-import { gsap, SplitText } from "@/lib/animacje";
+import { gsap } from "@/lib/animacje";
 import { oznaczStart } from "@/lib/start";
 import { ruchOgraniczony } from "@/lib/useRuchDozwolony";
 
@@ -21,7 +22,7 @@ export default function Preloader() {
   const lewa = useRef<HTMLDivElement>(null);
   const prawa = useRef<HTMLDivElement>(null);
   const tresc = useRef<HTMLDivElement>(null);
-  const logo = useRef<HTMLHeadingElement>(null);
+  const logo = useRef<HTMLDivElement>(null);
   const nad = useRef<HTMLParagraphElement>(null);
   const dol = useRef<HTMLDivElement>(null);
   const pasek = useRef<HTMLDivElement>(null);
@@ -55,22 +56,16 @@ export default function Preloader() {
     else window.addEventListener("load", podbij, { once: true });
 
     const ctx = gsap.context(() => {
-      /* —— 1. wejście: nadtytuł, litery logo, pasek —— */
-      const podzial = SplitText.create(logo.current, {
-        type: "chars",
-        mask: "chars",
-        charsClass: "maska-znak",
-      });
-
+      /* —— 1. wejście: nadtytuł, logotyp, pasek —— */
       const wejscie = gsap.timeline();
       wejscie
         .from(nad.current, { opacity: 0, letterSpacing: "1.2em", duration: 0.9, ease: "power3.out" })
         .from(
-          podzial.chars,
-          { yPercent: 120, duration: 0.9, stagger: 0.075, ease: "expo.out" },
-          "-=0.55",
+          logo.current,
+          { opacity: 0, scale: 1.35, filter: "blur(16px)", duration: 1.05, ease: "expo.out" },
+          "-=0.5",
         )
-        .from(dol.current, { opacity: 0, y: 18, duration: 0.6, ease: "power2.out" }, "-=0.45");
+        .from(dol.current, { opacity: 0, y: 18, duration: 0.6, ease: "power2.out" }, "-=0.5");
 
       /* —— 2. wyjście: drganie, błysk, rozdarcie —— */
       const wyjscie = gsap.timeline({ paused: true });
@@ -176,12 +171,17 @@ export default function Preloader() {
           wchodzisz na kanał
         </p>
 
-        <h1
-          ref={logo}
-          className="tekst-metal swiecacy-tekst text-center text-[clamp(3rem,16vw,11rem)] leading-none"
-        >
-          {site.nick}
-        </h1>
+        <div ref={logo} className="w-[min(80vw,640px)]">
+          <Image
+            src={site.assety.logoBaner}
+            alt={site.nick}
+            width={1201}
+            height={480}
+            priority
+            sizes="(max-width: 800px) 80vw, 640px"
+            className="logo-baner h-auto w-full drop-shadow-[0_0_30px_rgba(225,6,0,0.5)]"
+          />
+        </div>
 
         <div ref={dol} className="w-full max-w-sm">
           <div className="h-[3px] w-full overflow-hidden bg-white/10">
