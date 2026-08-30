@@ -55,7 +55,11 @@ Miniatury do sekcji Highlights. Podpisy i linki ustawiasz w `site.config.ts` →
 
 | Plik | Status | Wymiary | Uwagi |
 |---|---|---|---|
-| `bluza-hukszytv.png` … `naklejki-ekipa.png` (6 szt.) | 🟨 | 1000×1000 | Wygenerowane mockupy produktów w stylu marki (nawiązania do gier ze streamów). Podmień na zdjęcia realnego merchu zachowując nazwy; podpisy i ceny w `site.config.ts` → `sklep`. |
+| `bluza-hukszytv.png`, `tee-habanero.png`, `kubek-jumpscare.png` | 🟨 | 1000×1000 | Mockupy na **prawdziwych zdjęciach** (Pexels, licencja komercyjna) z nadrukiem logo w trybie `screen` — nadruk układa się na fałdach materiału. |
+| `podkladka-kuchnia.png`, `plakat-hukszy.png`, `naklejki-ekipa.png` | 🟨 | 1000×1000 | Rendery nadruku (produkty płaskie). |
+
+Wszystkie do podmiany po sesji zdjęciowej realnego merchu — zachowaj nazwy plików,
+podpisy i ceny ustawisz w `site.config.ts` → `sklep`.
 
 ## og/
 

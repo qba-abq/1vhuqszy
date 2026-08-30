@@ -111,16 +111,20 @@ export const site = {
 
   /* ——— SKLEP / MERCH ————————————————————————————————————
      linkSklepu pusty = przycisk "Zobacz cały sklep" prowadzi do donate
-     (sklep w budowie). Grafiki: /public/assets/sklep — wygenerowane
-     mockupy do podmiany na zdjęcia realnych produktów.               */
+     (sklep w budowie).
+
+     Grafiki w /public/assets/sklep to MOCKUPY: bluza, koszulka i kubek
+     powstały ze zdjęć stockowych (Pexels, licencja komercyjna) z nadrukiem
+     logo w trybie `screen`, reszta to render nadruku. Po sesji zdjęciowej
+     realnego merchu podmieniasz pliki zachowując nazwy.                */
   sklep: {
     linkSklepu: "",
     produkty: [
       { id: "bluza", nazwa: "Bluza HUKSZYTV", cena: 199, obraz: "/assets/sklep/bluza-hukszytv.png", znaczek: "Nowość", opis: "Klasyk ekipy" },
       { id: "tee-habanero", nazwa: "Tee Habanero Challenge", cena: 89, obraz: "/assets/sklep/tee-habanero.png", znaczek: "", opis: "100 follow = 🌶️ na żywo" },
-      { id: "kubek", nazwa: "Kubek Jumpscare Fuel", cena: 49, obraz: "/assets/sklep/kubek-jumpscare.png", znaczek: "Bestseller", opis: "Paliwo na horrory" },
+      { id: "kubek", nazwa: "Kubek z sygnetem", cena: 49, obraz: "/assets/sklep/kubek-jumpscare.png", znaczek: "Bestseller", opis: "Paliwo na horrory" },
       { id: "podkladka", nazwa: "Podkładka Kuchnia Chaosu", cena: 119, obraz: "/assets/sklep/podkladka-kuchnia.png", znaczek: "", opis: "Overcooked vibes, XXL" },
-      { id: "czapka", nazwa: "Snapback Grunge H", cena: 79, obraz: "/assets/sklep/czapka-h.png", znaczek: "", opis: "Sygnet na daszku" },
+      { id: "plakat", nazwa: "Plakat HUKSZY A2", cena: 59, obraz: "/assets/sklep/plakat-hukszy.png", znaczek: "", opis: "Logotyp na ścianę, 42×59 cm" },
       { id: "naklejki", nazwa: "Pakiet Naklejek Ekipy", cena: 19, obraz: "/assets/sklep/naklejki-ekipa.png", znaczek: "", opis: "12 sztuk na sprzęt" },
     ],
   },
