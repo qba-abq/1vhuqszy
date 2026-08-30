@@ -8,11 +8,21 @@ type Props = {
   children: React.ReactNode;
   /** Wyrównanie — domyślnie do lewej, jak na panelach kanału. */
   srodek?: boolean;
+  /** "bursztyn" rezerwujemy dla sklepu — odróżnia handel od reszty strony. */
+  akcent?: "czerwien" | "bursztyn";
   klasa?: string;
 };
 
 /** Nagłówek sekcji: rozstrzelony nadtytuł z kreskami + duży tytuł z maską. */
-export default function NaglowekSekcji({ nadtytul, children, srodek = false, klasa = "" }: Props) {
+export default function NaglowekSekcji({
+  nadtytul,
+  children,
+  srodek = false,
+  akcent = "czerwien",
+  klasa = "",
+}: Props) {
+  const kolor = akcent === "bursztyn" ? "text-huk-amber" : "text-huk-red";
+  const linia = akcent === "bursztyn" ? "linia-bursztyn" : "linia-akcent";
   const tytul = useRef<HTMLHeadingElement>(null);
   const nad = useRef<HTMLDivElement>(null);
 
@@ -24,9 +34,9 @@ export default function NaglowekSekcji({ nadtytul, children, srodek = false, kla
   return (
     <div className={`${srodek ? "text-center" : ""} ${klasa}`}>
       <div ref={nad} className={`kreski mb-5 ${srodek ? "justify-center" : ""}`} style={{ opacity: 0 }}>
-        {srodek && <span className="linia-akcent h-px w-10 sm:w-16" />}
-        <span className="podtytul text-huk-red">{nadtytul}</span>
-        <span className="linia-akcent h-px w-10 sm:w-16" />
+        {srodek && <span className={`${linia} h-px w-10 sm:w-16`} />}
+        <span className={`podtytul ${kolor}`}>{nadtytul}</span>
+        <span className={`${linia} h-px w-10 sm:w-16`} />
       </div>
 
       <h2

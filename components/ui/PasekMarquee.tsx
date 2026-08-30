@@ -61,7 +61,7 @@ export default function PasekMarquee({ slowa, kierunek = 1, klasa = "" }: Props)
 
   return (
     <div
-      className={`pointer-events-none relative z-10 select-none overflow-hidden border-y border-huk-red/25 bg-huk-ink/60 py-4 backdrop-blur-[2px] sm:py-5 ${klasa}`}
+      className={`pointer-events-none relative z-10 select-none overflow-hidden border-y border-huk-red/25 bg-huk-p1/70 py-4 backdrop-blur-[2px] sm:py-5 ${klasa}`}
       aria-hidden="true"
     >
       <div ref={tor} role="presentation" className="flex w-max items-center gap-8 whitespace-nowrap pr-8 sm:gap-12 sm:pr-12">

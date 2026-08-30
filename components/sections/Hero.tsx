@@ -172,12 +172,12 @@ export default function Hero() {
           fill
           priority
           sizes="100vw"
-          className="object-cover opacity-60 md:opacity-40"
+          className="object-cover opacity-70 md:opacity-52"
         />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,#050505_82%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-huk-ink to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,var(--pow0)_82%)]" />
+        <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-t from-huk-p0 to-transparent" />
         {/* wyciszenie tła pod sceną — kryształ ma być najjaśniejszym elementem kadru */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_58%_48%_at_center,rgba(5,5,5,0.72),rgba(5,5,5,0.4)_62%,rgba(5,5,5,0.15))] md:bg-[radial-gradient(ellipse_58%_48%_at_center,rgba(5,5,5,0.9),rgba(5,5,5,0.5)_62%,rgba(5,5,5,0.2))]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_58%_48%_at_center,rgba(14,14,19,0.66),rgba(14,14,19,0.34)_62%,rgba(14,14,19,0.12))] md:bg-[radial-gradient(ellipse_58%_48%_at_center,rgba(14,14,19,0.84),rgba(14,14,19,0.44)_62%,rgba(14,14,19,0.16))]" />
       </div>
 
       {/* ——— scena 3D ——— */}
@@ -218,7 +218,7 @@ export default function Hero() {
 
         <p
           data-wejscie
-          className="mt-4 max-w-xl text-balance text-sm leading-relaxed text-white/75 [text-shadow:0_2px_18px_#000,0_0_40px_#000] sm:mt-6 sm:text-base"
+          className="mt-4 max-w-xl text-balance text-sm leading-relaxed text-huk-t2 [text-shadow:0_2px_18px_#000,0_0_40px_#000] sm:mt-6 sm:text-base"
         >
           {site.opis}
         </p>
@@ -240,7 +240,7 @@ export default function Hero() {
         ref={wskaznik}
         className="pointer-events-none absolute inset-x-0 bottom-6 z-10 hidden flex-col items-center gap-2 [@media(min-height:700px)]:flex"
       >
-        <span className="podtytul text-white/60">scrolluj</span>
+        <span className="podtytul text-huk-t2">scrolluj</span>
         <span className="h-10 w-px bg-gradient-to-b from-huk-red to-transparent" />
       </div>
     </section>

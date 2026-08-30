@@ -19,7 +19,7 @@ export default function StatusLive({ klasa = "" }: { klasa?: string }) {
       className={`inline-flex items-center gap-3 border px-4 py-2 ${
         czyLive
           ? "border-huk-red/60 bg-huk-red/10 shadow-neon"
-          : "border-white/15 bg-white/[0.03]"
+          : "border-huk-linia2 bg-huk-p2/60"
       } ${klasa}`}
       style={{ clipPath: "polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px)" }}
     >
@@ -34,12 +34,12 @@ export default function StatusLive({ klasa = "" }: { klasa?: string }) {
         />
       </span>
 
-      <span className={`podtytul ${czyLive ? "text-huk-white" : "text-white/60"}`}>
+      <span className={`podtytul ${czyLive ? "text-huk-white" : "text-huk-t2"}`}>
         {czyLive ? "live teraz" : "offline"}
       </span>
 
       {czyLive && (
-        <span className="hidden max-w-[38ch] truncate border-l border-white/15 pl-3 text-xs text-white/60 sm:inline">
+        <span className="hidden max-w-[38ch] truncate border-l border-huk-linia2 pl-3 text-xs text-huk-t2 sm:inline">
           {gra} · {tytulStreamu}
         </span>
       )}

@@ -56,7 +56,7 @@ export default function Nawigacja() {
   return (
     <header
       ref={pasek}
-      className="fixed inset-x-0 top-0 z-50 border-b border-white/8 bg-huk-ink/85 backdrop-blur-md"
+      className="fixed inset-x-0 top-0 z-50 border-b border-huk-linia bg-huk-p0/88 backdrop-blur-md"
     >
       <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
         <Link
@@ -80,7 +80,7 @@ export default function Nawigacja() {
               <Link
                 href={`#${p.id}`}
                 className={`relative text-[0.7rem] font-bold uppercase tracking-[0.18em] transition-colors duration-200 ${
-                  aktywna === p.id ? "text-huk-white" : "text-white/55 hover:text-white/85"
+                  aktywna === p.id ? "text-huk-white" : "text-huk-t3 hover:text-huk-t1"
                 }`}
               >
                 {p.etykieta}

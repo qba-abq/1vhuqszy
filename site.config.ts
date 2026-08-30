@@ -31,14 +31,41 @@ export const site = {
      Wstrzykiwane jako zmienne CSS w app/layout.tsx.
      Zmiana tutaj = zmiana w całym serwisie.                       */
   kolory: {
+    /* ——— akcent marki ——— */
     akcent: "#E10600", // czerwony marki
-    akcentJasny: "#FF2A1F", // poświata / hover
+    akcentJasny: "#FF3B30", // poświata / hover
     akcentCiemny: "#8A0400", // cienie, gradienty
-    tlo: "#0D0D0D", // czarny marki
-    tloGlebokie: "#050505", // tło sekcji
+
+    /* ——— drugi akcent: SKLEP ————————————————————————————
+       Bursztyn sąsiaduje z czerwienią (paleta „ognia"), więc nie kłóci się
+       z marką, a wyraźnie oddziela handel od reszty strony: ceny, znaczki
+       i nagłówek sklepu. Nigdzie indziej go nie używamy.              */
+    akcent2: "#FFB020",
+    akcent2Ciemny: "#B36F00",
+
+    /* ——— powierzchnie ————————————————————————————————————
+       Czysta czerń spłaszcza układ i męczy oczy, dlatego baza to ciemna
+       szarość, a każdy kolejny poziom jest JAŚNIEJSZY (w ciemnym motywie
+       głębię buduje światło, nie cień).                                */
+    pow0: "#101017", // tło strony
+    pow1: "#191921", // sekcje wyróżnione, panele
+    pow2: "#22222C", // karty
+    pow3: "#2D2D39", // karta pod kursorem
+
+    /* ——— tekst: trzy poziomy ważności ——— */
+    tekst1: "rgba(255,255,255,0.94)",
+    tekst2: "rgba(255,255,255,0.72)",
+    tekst3: "rgba(255,255,255,0.54)",
+
+    /* ——— linie ——— */
+    linia: "rgba(255,255,255,0.09)",
+    linia2: "rgba(255,255,255,0.17)",
+
+    /* zgodność wstecz */
+    tlo: "#191921",
+    tloGlebokie: "#101017",
     tekst: "#FFFFFF",
   },
-
   /* ——— STATUS LIVE ——————————————————————————————————————
      Na razie mock. Podmiana na realny Twitch API: patrz components/ui/StatusLive.tsx */
   live: {

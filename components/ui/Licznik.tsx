@@ -53,7 +53,7 @@ export default function Licznik({ wartosc, sufiks = "", etykieta }: Props) {
         <span ref={liczba}>0</span>
         <span className="text-huk-red">{sufiks}</span>
       </div>
-      <div className="podtytul mt-3 text-[0.6rem] leading-tight text-white/65 transition-colors duration-300 group-hover:text-white/80">
+      <div className="podtytul mt-3 text-[0.6rem] leading-tight text-huk-t2 transition-colors duration-300 group-hover:text-huk-t1">
         {etykieta}
       </div>
     </div>

@@ -71,7 +71,7 @@ export default function Harmonogram() {
     <section
       ref={sekcja}
       id="harmonogram"
-      className="relative overflow-hidden bg-huk-black/60 px-6 py-24 sm:py-32"
+      className="relative overflow-hidden bg-huk-p1/92 px-6 py-24 sm:py-32"
       aria-label="Harmonogram streamów"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-huk-red/60 to-transparent" />
@@ -94,8 +94,8 @@ export default function Harmonogram() {
                   onPointerMove={ustawSwiatlo}
                   className={`spotlight group relative flex items-center gap-4 border-y border-r bg-gradient-to-r py-5 pl-5 pr-4 transition-all duration-300 sm:gap-7 sm:pl-7 ${
                     dzisiaj
-                      ? "border-huk-red/45 from-huk-red/[0.14] to-transparent"
-                      : "border-white/8 from-white/[0.035] to-transparent hover:border-huk-red/35 hover:from-huk-red/[0.09]"
+                      ? "border-huk-red/50 from-huk-red/[0.16] to-huk-p2 shadow-karta"
+                      : "border-huk-linia from-huk-p2 to-huk-p2/75 shadow-karta hover:border-huk-red/40 hover:from-huk-red/[0.10]"
                   }`}
                 >
                   {/* pionowy akcent po lewej */}
@@ -116,7 +116,7 @@ export default function Harmonogram() {
                     >
                       {d.skrot}
                     </div>
-                    <div className="mt-1.5 text-[0.6rem] uppercase tracking-[0.18em] text-white/50">
+                    <div className="mt-1.5 text-[0.6rem] uppercase tracking-[0.18em] text-huk-t3">
                       {d.dzien}
                     </div>
                   </div>
@@ -132,7 +132,7 @@ export default function Harmonogram() {
                     </div>
 
                     {"opis" in d && d.opis && (
-                      <p className="truncate text-xs text-white/60 sm:text-sm">{d.opis}</p>
+                      <p className="truncate text-xs text-huk-t2 sm:text-sm">{d.opis}</p>
                     )}
                   </div>
 
@@ -147,7 +147,7 @@ export default function Harmonogram() {
                         najbliższy
                       </span>
                     ) : (
-                      <span className="text-[0.65rem] tracking-[0.16em] text-white/45">
+                      <span className="text-[0.65rem] tracking-[0.16em] text-huk-t3">
                         {dlugosc(d.godziny!.od, d.godziny!.do)}
                       </span>
                     )}
@@ -162,11 +162,11 @@ export default function Harmonogram() {
         <div
           data-wolne
           style={{ opacity: 0 }}
-          className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[0.65rem] uppercase tracking-[0.18em] text-white/40"
+          className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-[0.65rem] uppercase tracking-[0.18em] text-huk-t3"
         >
-          <span className="text-white/55">wolne:</span>
+          <span className="text-huk-t3">wolne:</span>
           {dniWolne.map((d, i) => (
-            <span key={d.skrot} className="text-white/40">
+            <span key={d.skrot} className="text-huk-t3">
               {i > 0 && <span className="mr-3 text-huk-red/60">·</span>}
               {d.dzien}
             </span>
@@ -174,7 +174,7 @@ export default function Harmonogram() {
         </div>
 
         <div className="mt-12 flex flex-col items-center gap-4">
-          <p className="text-center text-xs text-white/60">
+          <p className="text-center text-xs text-huk-t2">
             Godziny potrafią się przesunąć. O zmianach informuję na Discordzie i Instagramie.
           </p>
           <PrzyciskCTA href={site.linki.twitch}>Wbijaj na Twitcha</PrzyciskCTA>

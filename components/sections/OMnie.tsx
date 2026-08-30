@@ -29,7 +29,7 @@ export default function OMnie() {
     <section
       ref={sekcja}
       id="o-mnie"
-      className="relative overflow-hidden bg-huk-ink/60 px-6 py-24 sm:py-32"
+      className="relative overflow-hidden bg-huk-p0/78 px-6 py-24 sm:py-32"
       aria-label="O mnie"
     >
       {/* czerwona łuna z lewej + rastr */}
@@ -54,7 +54,7 @@ export default function OMnie() {
 
           <div ref={tekst} className="mt-8 space-y-5">
             {site.bio.map((akapit, i) => (
-              <p key={i} className="max-w-prose text-sm leading-relaxed text-white/60 sm:text-base" style={{ opacity: 0 }}>
+              <p key={i} className="max-w-prose text-sm leading-relaxed text-huk-t2 sm:text-base" style={{ opacity: 0 }}>
                 {akapit}
               </p>
             ))}

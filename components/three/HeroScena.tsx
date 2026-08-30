@@ -100,7 +100,7 @@ export default function HeroScena() {
           <Iskry ile={mobilnie ? 180 : 480} />
 
           {/* mgła tylko dla dalekiego planu — bryła stoi ~7 jednostek od kamery */}
-          <fog attach="fog" args={["#050505", 13, 30]} />
+          <fog attach="fog" args={["#101017", 13, 30]} />
         </Canvas>
       )}
     </div>

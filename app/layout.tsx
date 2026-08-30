@@ -53,6 +53,17 @@ const zmienneKolorow = `:root{
   --akcent:${site.kolory.akcent};
   --akcent-jasny:${site.kolory.akcentJasny};
   --akcent-ciemny:${site.kolory.akcentCiemny};
+  --akcent2:${site.kolory.akcent2};
+  --akcent2-ciemny:${site.kolory.akcent2Ciemny};
+  --pow0:${site.kolory.pow0};
+  --pow1:${site.kolory.pow1};
+  --pow2:${site.kolory.pow2};
+  --pow3:${site.kolory.pow3};
+  --tekst1:${site.kolory.tekst1};
+  --tekst2:${site.kolory.tekst2};
+  --tekst3:${site.kolory.tekst3};
+  --linia:${site.kolory.linia};
+  --linia2:${site.kolory.linia2};
   --tlo:${site.kolory.tlo};
   --tlo-glebokie:${site.kolory.tloGlebokie};
   --tekst:${site.kolory.tekst};

@@ -50,7 +50,7 @@ export default function PrzyciskCTA({
   const styl =
     wariant === "pelny"
       ? "bg-huk-red text-white hover:bg-huk-red-hot hover:shadow-neon-mocny"
-      : "border border-white/25 text-white/80 hover:border-huk-red hover:text-white hover:shadow-neon";
+      : "border border-huk-linia2 text-huk-t1 hover:border-huk-red hover:text-white hover:shadow-neon";
 
   return (
     <Link

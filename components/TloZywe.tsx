@@ -257,8 +257,8 @@ export default function TloZywe() {
       />
 
       {/* wygaszenie góry i dołu */}
-      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-huk-ink to-transparent" />
-      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-huk-ink to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-huk-p0 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-huk-p0 to-transparent" />
     </div>
   );
 }

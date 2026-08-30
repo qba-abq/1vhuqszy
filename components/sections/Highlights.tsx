@@ -62,7 +62,7 @@ export default function Highlights() {
     <section
       ref={sekcja}
       id="klipy"
-      className="relative overflow-hidden bg-huk-ink/60 px-6 py-24 sm:py-32"
+      className="relative overflow-hidden bg-huk-p0/72 px-6 py-24 sm:py-32"
       aria-label="Najlepsze klipy"
     >
       <div className="halftone pointer-events-none absolute left-8 top-16 h-32 w-32 opacity-15" />
@@ -82,7 +82,7 @@ export default function Highlights() {
                     ? { href: klip.link, target: "_blank", rel: "noopener noreferrer" }
                     : {})}
                   onPointerMove={ustawSwiatlo}
-                  className="spotlight group relative block aspect-video overflow-hidden border border-white/10 transition-colors duration-300 hover:border-huk-red/70"
+                  className="spotlight group relative block aspect-video overflow-hidden border border-huk-linia transition-colors duration-300 hover:border-huk-red/70"
                   style={{ clipPath: SKOS }}
                 >
                   <div data-obraz className="absolute inset-0 scale-[1.18]">
@@ -96,7 +96,7 @@ export default function Highlights() {
                   </div>
 
                   {/* przyciemnienie + czerwony rozbłysk na hover */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-huk-ink via-huk-ink/25 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-huk-p0 via-huk-p0/30 to-transparent" />
                   <div className="absolute inset-0 bg-huk-red/0 transition-colors duration-300 group-hover:bg-huk-red/15" />
 
                   {/* play */}

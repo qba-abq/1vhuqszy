@@ -22,7 +22,25 @@ npm run build && npm start
 | Chcesz zmienić | Plik |
 |---|---|
 | Nick, bio, linki, harmonogram, statystyki, klipy, SEO | `site.config.ts` |
-| Kolory akcentowe | `site.config.ts` → `kolory` (wstrzykiwane jako zmienne CSS) |
+| Kolory i powierzchnie | `site.config.ts` → `kolory` (wstrzykiwane jako zmienne CSS) |
+
+### System kolorów
+
+Ciemny motyw stoi na **skali powierzchni**, nie na czerni — czysta czerń spłaszcza
+układ i męczy oczy, a głębię w dark UI buduje się **jaśniejszymi warstwami**, nie cieniami:
+
+| Token | Wartość | Do czego |
+|---|---|---|
+| `pow0` | `#101017` | tło strony |
+| `pow1` | `#191921` | sekcje wyróżnione |
+| `pow2` | `#22222C` | karty, sekcja sklepu (najwyżej w hierarchii) |
+| `pow3` | `#2D2D39` | karta pod kursorem |
+| `tekst1/2/3` | 94% / 72% / 54% bieli | trzy poziomy ważności |
+| `akcent` | `#E10600` | marka, akcje |
+| `akcent2` | `#FFB020` | **tylko sklep**: ceny, znaczki, nagłówek |
+
+Sekcje idą naprzemiennie (`pow0` → `pow1` → `pow0` → **`pow2` sklep** → `pow1`),
+więc sklep jest najjaśniejszą powierzchnią na stronie i odcina się od reszty.
 | Scena 3D na telefonach (domyślnie wyłączona) | `site.config.ts` → `wydajnosc.scena3DnaMobile` |
 | Długość intro | `site.config.ts` → `wydajnosc.dlugoscIntroMs` / `dlugoscIntroMobileMs` |
 | Zdjęcie w sekcji „O mnie" | `site.config.ts` → `assety.portret` (puste = sam kadr z sygnetem) |

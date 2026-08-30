@@ -87,7 +87,7 @@ export default function Preloader() {
         )
         .to(tresc.current, { opacity: 0, scale: 1.14, duration: 0.4, ease: "power2.in" }, "-=0.12")
         .to(root.current, { backgroundColor: site.kolory.akcent, duration: 0.07 }, "-=0.1")
-        .to(root.current, { backgroundColor: "#050505", duration: 0.14 })
+        .to(root.current, { backgroundColor: site.kolory.pow0, duration: 0.14 })
         .addLabel("rozdarcie")
         .to(szew.current, { opacity: 0, duration: 0.5 }, "rozdarcie")
         .to(
@@ -143,12 +143,12 @@ export default function Preloader() {
       {/* dwie połowy rozdzieranej kurtyny */}
       <div
         ref={lewa}
-        className="absolute inset-0 bg-huk-ink"
+        className="absolute inset-0 bg-huk-p0"
         style={{ clipPath: KLIP_LEWA, WebkitClipPath: KLIP_LEWA }}
       />
       <div
         ref={prawa}
-        className="absolute inset-0 bg-huk-ink"
+        className="absolute inset-0 bg-huk-p0"
         style={{ clipPath: KLIP_PRAWA, WebkitClipPath: KLIP_PRAWA }}
       />
 
@@ -191,7 +191,7 @@ export default function Preloader() {
             />
           </div>
           <div className="mt-3 flex items-baseline justify-between">
-            <span className="podtytul text-white/65">ładowanie</span>
+            <span className="podtytul text-huk-t2">ładowanie</span>
             <span className="font-display text-3xl text-huk-white tabular-nums">
               {procent}
               <span className="text-huk-red">%</span>

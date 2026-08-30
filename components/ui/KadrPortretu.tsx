@@ -35,7 +35,7 @@ export default function KadrPortretu() {
           sizes="(max-width: 1024px) 80vw, 380px"
           className="object-cover opacity-30"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-huk-ink/70 to-huk-ink" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-huk-p0/60 to-huk-p0" />
         <div className="halftone absolute right-3 top-3 h-16 w-16 opacity-25" />
 
         {zdjecie ? (
@@ -58,7 +58,7 @@ export default function KadrPortretu() {
                 className="object-cover"
               />
             </div>
-            <span className="podtytul text-white/60">{site.handle}</span>
+            <span className="podtytul text-huk-t2">{site.handle}</span>
           </div>
         )}
 

@@ -24,7 +24,7 @@ export default function OG() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          background: "#050505",
+          background: site.kolory.pow0,
           backgroundImage:
             "radial-gradient(ellipse at 50% 120%, rgba(225,6,0,0.55), transparent 60%), radial-gradient(ellipse at 0% 0%, rgba(225,6,0,0.22), transparent 55%)",
           position: "relative",

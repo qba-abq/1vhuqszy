@@ -46,7 +46,7 @@ export default function Kontakt() {
     <section
       ref={sekcja}
       id="kontakt"
-      className="relative overflow-hidden bg-huk-black/60 px-6 pb-0 pt-24 sm:pt-32"
+      className="relative overflow-hidden bg-huk-p1/92 px-6 pb-0 pt-24 sm:pt-32"
       aria-label="Social media i kontakt"
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-huk-red/60 to-transparent" />
@@ -69,9 +69,9 @@ export default function Kontakt() {
               rel="noopener noreferrer"
               className="panel-hud group flex flex-col items-center gap-3 px-4 py-7 transition-all duration-300 hover:-translate-y-1 hover:border-huk-red hover:shadow-neon"
             >
-              <Ikona className="h-9 w-9 text-white/55 transition-all duration-300 group-hover:scale-110 group-hover:text-huk-red group-hover:drop-shadow-[0_0_12px_rgba(225,6,0,0.8)]" />
+              <Ikona className="h-9 w-9 text-huk-t3 transition-all duration-300 group-hover:scale-110 group-hover:text-huk-red group-hover:drop-shadow-[0_0_12px_rgba(225,6,0,0.8)]" />
               <span className="font-display text-lg leading-none text-huk-white">{nazwa}</span>
-              <span className="text-center text-[0.65rem] uppercase tracking-[0.16em] text-white/60 transition-colors duration-300 group-hover:text-huk-red">
+              <span className="text-center text-[0.65rem] uppercase tracking-[0.16em] text-huk-t2 transition-colors duration-300 group-hover:text-huk-red">
                 {opis}
               </span>
             </Link>
@@ -91,7 +91,7 @@ export default function Kontakt() {
             </span>
             <div>
               <h3 className="font-display text-2xl text-huk-white sm:text-3xl">Wesprzyj kanał</h3>
-              <p className="mt-1 max-w-md text-xs leading-relaxed text-white/65 sm:text-sm">
+              <p className="mt-1 max-w-md text-xs leading-relaxed text-huk-t2 sm:text-sm">
                 Sprzęt, gry i lepsze streamy. Każda złotówka wraca do was w jakości.
               </p>
             </div>
@@ -102,7 +102,7 @@ export default function Kontakt() {
 
         {/* ——— kontakt ——— */}
         <div className="mt-10 flex flex-col items-center gap-3">
-          <span className="podtytul text-white/60">współpraca</span>
+          <span className="podtytul text-huk-t2">współpraca</span>
           <Link
             href={`mailto:${site.linki.email}`}
             className="group inline-flex items-center gap-3 font-display text-xl text-huk-white transition-colors hover:text-huk-red sm:text-2xl"
@@ -114,10 +114,10 @@ export default function Kontakt() {
       </div>
 
       {/* ——— stopka ——— */}
-      <footer className="mx-auto mt-20 max-w-6xl border-t border-white/8 py-8">
+      <footer className="mx-auto mt-20 max-w-6xl border-t border-huk-linia py-8">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <span className="tekst-metal font-display text-2xl leading-none">{site.nick}</span>
-          <p className="text-center text-[0.65rem] uppercase tracking-[0.18em] text-white/55">
+          <p className="text-center text-[0.65rem] uppercase tracking-[0.18em] text-huk-t3">
             © {new Date().getFullYear()} {site.handle} · wszystkie prawa zastrzeżone
           </p>
           <div className="flex gap-4">
@@ -128,7 +128,7 @@ export default function Kontakt() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={nazwa}
-                className="text-white/55 transition-colors hover:text-huk-red"
+                className="text-huk-t3 transition-colors hover:text-huk-red"
               >
                 <Ikona className="h-5 w-5" />
               </Link>
