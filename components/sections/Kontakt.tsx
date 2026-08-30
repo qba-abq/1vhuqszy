@@ -7,6 +7,7 @@ import { gsap, animujWejscie } from "@/lib/animacje";
 import NaglowekSekcji from "@/components/ui/NaglowekSekcji";
 import PrzyciskCTA from "@/components/ui/PrzyciskCTA";
 import {
+  IkonaKick,
   IkonaTwitch,
   IkonaYouTube,
   IkonaInstagram,
@@ -21,6 +22,7 @@ const SKOS =
 
 const KANALY = [
   { nazwa: "Twitch", opis: "streamy na żywo", href: site.linki.twitch, Ikona: IkonaTwitch },
+  { nazwa: "Kick", opis: "ten sam live, druga scena", href: site.linki.kick, Ikona: IkonaKick },
   { nazwa: "Discord", opis: "społeczność i powiadomienia", href: site.linki.discord, Ikona: IkonaDiscord },
   { nazwa: "Instagram", opis: "kulisy i updaty", href: site.linki.instagram, Ikona: IkonaInstagram },
   { nazwa: "YouTube", opis: "pełne odcinki", href: site.linki.youtube, Ikona: IkonaYouTube },
@@ -56,7 +58,7 @@ export default function Kontakt() {
         </NaglowekSekcji>
 
         {/* ——— kanały ——— */}
-        <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5 lg:gap-4">
+        <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
           {KANALY.map(({ nazwa, opis, href, Ikona }) => (
             <Link
               key={nazwa}

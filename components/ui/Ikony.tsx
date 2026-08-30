@@ -38,6 +38,12 @@ export const IkonaDiscord = ({ className }: P) => (
   </svg>
 );
 
+export const IkonaKick = ({ className }: P) => (
+  <svg {...wspolne(className)}>
+    <path d="M5 3h5v5h3V6h3V3h5v6h-3v2h-3v2h3v2h3v6h-5v-3h-3v-2h-3v5H5V3Z" />
+  </svg>
+);
+
 export const IkonaSerce = ({ className }: P) => (
   <svg {...wspolne(className)}>
     <path d="M12 20.8 4.6 13.4a4.8 4.8 0 0 1 0-6.8 4.8 4.8 0 0 1 6.8 0l.6.6.6-.6a4.8 4.8 0 0 1 6.8 6.8L12 20.8Z" />

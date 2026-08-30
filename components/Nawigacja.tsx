@@ -9,6 +9,7 @@ const POZYCJE = [
   { id: "o-mnie", etykieta: "O mnie" },
   { id: "harmonogram", etykieta: "Harmonogram" },
   { id: "klipy", etykieta: "Klipy" },
+  { id: "sklep", etykieta: "Merch" },
   { id: "kontakt", etykieta: "Social" },
 ] as const;
 

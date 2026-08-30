@@ -13,8 +13,8 @@ export const site = {
     "Gram głośno, tnę szybko i nie udaję, że wiem co robię. " +
     "Wpadaj na live po hałas, memy i horrory, przy których razem będziemy się bać.",
   bio: [
-    "Cześć, jestem HUKSZY. Streamuję trzy razy w tygodniu: od horrorów, przez sesje z widzami, po granie w rzeczy, których nikt mi nie polecał.",
-    "Kanał zbudowała społeczność, która przychodzi po głośny śmiech i zostaje na dłużej. Jeśli lubisz szybkie cięcia, jumpscare'y i autoironię, jesteś u siebie.",
+    "Cześć, jestem HUKSZY. Streamuję trzy razy w tygodniu: horrory, przy których krzyczę głośniej niż gra, i kooperacyjny chaos w stylu Overcooked 2 albo Biped, gdzie razem z ekipą sabotujemy sobie życie.",
+    "Do tego challenge dla społeczności (100 follow = habanero na żywo), kolaby z innymi twórcami i memy. Nadaję równolegle na Twitchu i Kicku. Wpadaj, jesteś u siebie.",
   ],
 
   /* ——— DOMENA / SEO ————————————————————————————————————— */
@@ -69,6 +69,7 @@ export const site = {
   /* ——— LINKI ————————————————————————————————————————— */
   linki: {
     twitch: "https://twitch.tv/hukszy",
+    kick: "https://kick.com/hukszy",
     youtube: "https://youtube.com/@hukszytv",
     instagram: "https://instagram.com/hukszytv",
     tiktok: "https://tiktok.com/@hukszytv",
@@ -79,10 +80,10 @@ export const site = {
 
   /* ——— STATYSTYKI (animowane liczniki) ——————————————————— */
   statystyki: [
-    { etykieta: "Obserwujących", wartosc: 12400, sufiks: "+" },
-    { etykieta: "Godzin na live", wartosc: 1850, sufiks: "h" },
-    { etykieta: "Streamów w roku", wartosc: 156, sufiks: "" },
-    { etykieta: "Ludzi na Discordzie", wartosc: 3200, sufiks: "+" },
+    { etykieta: "Streamy w tygodniu", wartosc: 3, sufiks: "" },
+    { etykieta: "Godziny na jednym live", wartosc: 3, sufiks: "h" },
+    { etykieta: "Platformy równolegle", wartosc: 2, sufiks: "" },
+    { etykieta: "Gier w rotacji", wartosc: 5, sufiks: "+" },
   ],
 
   /* ——— HARMONOGRAM ——————————————————————————————————————
@@ -100,13 +101,29 @@ export const site = {
   /* ——— HIGHLIGHTS / KLIPY ————————————————————————————————
      miniatura: podmień plik w /public/assets/klipy (16:9, 1280×720) */
   klipy: [
-    { id: "klip-1", tytul: "Krzyk, który usłyszało całe osiedle", opis: "Phasmophobia", miniatura: "/assets/klipy/klip-1.png", link: "" },
-    { id: "klip-2", tytul: "Clutch na ostatniej sekundzie", opis: "CS2", miniatura: "/assets/klipy/klip-2.png", link: "" },
-    { id: "klip-3", tytul: "Widz zgadł hasło w 2 sekundy", opis: "Teleturniej", miniatura: "/assets/klipy/klip-3.png", link: "" },
-    { id: "klip-4", tytul: "Najgorszy skok wiary w historii", opis: "Elden Ring", miniatura: "/assets/klipy/klip-4.png", link: "" },
-    { id: "klip-5", tytul: "Mikrofon nie wytrzymał", opis: "Reakcje", miniatura: "/assets/klipy/klip-5.png", link: "" },
-    { id: "klip-6", tytul: "Speedrun do zawału", opis: "Lethal Company", miniatura: "/assets/klipy/klip-6.png", link: "" },
+    { id: "klip-1", tytul: "Biped z Kimusią, czyli dwie nogi za dużo", opis: "Biped · kolab", miniatura: "/assets/klipy/klip-1.png", link: "https://www.twitch.tv/hukszy/videos" },
+    { id: "klip-2", tytul: "4 osoby w kuchni, ale to nie MasterChef", opis: "Overcooked! 2", miniatura: "/assets/klipy/klip-2.png", link: "https://www.twitch.tv/hukszy/videos" },
+    { id: "klip-3", tytul: "100 follow = habanero na żywo", opis: "Challenge 🌶️", miniatura: "/assets/klipy/klip-3.png", link: "https://www.twitch.tv/hukszy" },
+    { id: "klip-4", tytul: "Jumpscare za jumpscare'em", opis: "Jumpscare Scare Jump", miniatura: "/assets/klipy/klip-4.png", link: "https://www.twitch.tv/hukszy/videos" },
+    { id: "klip-5", tytul: "Nocna zmiana, której nie przeżyłem", opis: "The Night Shift · Kick", miniatura: "/assets/klipy/klip-5.png", link: "https://kick.com/hukszy" },
+    { id: "klip-6", tytul: "Kameleon szybszy niż mój refleks", opis: "Meccha Chameleon · Kick", miniatura: "/assets/klipy/klip-6.png", link: "https://kick.com/hukszy" },
   ],
+
+  /* ——— SKLEP / MERCH ————————————————————————————————————
+     linkSklepu pusty = przycisk "Zobacz cały sklep" prowadzi do donate
+     (sklep w budowie). Grafiki: /public/assets/sklep — wygenerowane
+     mockupy do podmiany na zdjęcia realnych produktów.               */
+  sklep: {
+    linkSklepu: "",
+    produkty: [
+      { id: "bluza", nazwa: "Bluza HUKSZYTV", cena: 199, obraz: "/assets/sklep/bluza-hukszytv.png", znaczek: "Nowość", opis: "Klasyk ekipy" },
+      { id: "tee-habanero", nazwa: "Tee Habanero Challenge", cena: 89, obraz: "/assets/sklep/tee-habanero.png", znaczek: "", opis: "100 follow = 🌶️ na żywo" },
+      { id: "kubek", nazwa: "Kubek Jumpscare Fuel", cena: 49, obraz: "/assets/sklep/kubek-jumpscare.png", znaczek: "Bestseller", opis: "Paliwo na horrory" },
+      { id: "podkladka", nazwa: "Podkładka Kuchnia Chaosu", cena: 119, obraz: "/assets/sklep/podkladka-kuchnia.png", znaczek: "", opis: "Overcooked vibes, XXL" },
+      { id: "czapka", nazwa: "Snapback Grunge H", cena: 79, obraz: "/assets/sklep/czapka-h.png", znaczek: "", opis: "Sygnet na daszku" },
+      { id: "naklejki", nazwa: "Pakiet Naklejek Ekipy", cena: 19, obraz: "/assets/sklep/naklejki-ekipa.png", znaczek: "", opis: "12 sztuk na sprzęt" },
+    ],
+  },
 
   /* ——— ŚCIEŻKI DO GRAFIK ————————————————————————————————
      Pełna lista wymaganych plików: /public/assets/README.md        */

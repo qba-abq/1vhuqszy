@@ -7,6 +7,7 @@ import Hero from "@/components/sections/Hero";
 import OMnie from "@/components/sections/OMnie";
 import Harmonogram from "@/components/sections/Harmonogram";
 import Highlights from "@/components/sections/Highlights";
+import Sklep from "@/components/sections/Sklep";
 import Kontakt from "@/components/sections/Kontakt";
 
 export default function Home() {
@@ -26,6 +27,8 @@ export default function Home() {
           slowa={["Klipy", "Highlights", "Memy", "Horror", "Jumpscare"]}
         />
         <Highlights />
+        <PasekMarquee slowa={["Merch", "Habanero Tee", "Jumpscare Fuel", "Ekipa"]} />
+        <Sklep />
         <Kontakt />
       </main>
     </>

@@ -51,6 +51,12 @@ Miniatury do sekcji Highlights. Podpisy i linki ustawiasz w `site.config.ts` →
 | `panel-donate.jpg` | ✅ | 1600×639 | Twoja grafika. |
 | `panel-harmonogram.jpg` | ✅ | 1254×1254 | Twoja grafika (referencja stylu). |
 
+## sklep/
+
+| Plik | Status | Wymiary | Uwagi |
+|---|---|---|---|
+| `bluza-hukszytv.png` … `naklejki-ekipa.png` (6 szt.) | 🟨 | 1000×1000 | Wygenerowane mockupy produktów w stylu marki (nawiązania do gier ze streamów). Podmień na zdjęcia realnego merchu zachowując nazwy; podpisy i ceny w `site.config.ts` → `sklep`. |
+
 ## og/
 
 | Plik | Status | Wymiary | Format | Uwagi |

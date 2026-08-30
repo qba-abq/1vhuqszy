@@ -194,7 +194,7 @@ export default function Hero() {
       >
         <div data-wejscie className="kreski mb-6 justify-center">
           <span className="linia-akcent h-px w-10 sm:w-16" />
-          <span className="podtytul text-huk-red">streamer · {site.handle}</span>
+          <span className="podtytul text-huk-red">streamer · twitch + kick</span>
           <span className="linia-akcent h-px w-10 sm:w-16" />
         </div>
 
