@@ -115,18 +115,29 @@ export default function Preloader() {
          zwalnia asymptotycznie (nigdy nie dobija do 100% i nigdy nie stoi);
          po załadowaniu dogania czas. Wcześniej brał min(zasoby, czas), a
          zasoby to tylko 2 skoki (0 -> 50 -> 100%), więc przy wolnym `load`
-         stał na 0 i nagle przeskakiwał.                                    */
+         stał na 0 i nagle przeskakiwał.
+
+         Czas liczymy z KLATEK, nie z zegara: na starcie wątek główny potrafi
+         stać 1-2 s (hydratacja, three.js, w dev kompilacja) i nie narysować
+         ani jednej klatki. Z zegarem pasek stał wtedy na 0, a po odblokowaniu
+         „nadrabiał" cały ten czas naraz. Teraz jedna klatka to najwyżej
+         MAKS_KLATKA_MS czasu paska, a szybkość doganiania jest ograniczona. */
+      const MAKS_KLATKA_MS = 34; // ~2 klatki przy 60 Hz
+      const MAKS_KROK = 0.015; // max ~90%/s przy 60 Hz
       let biezacy = 0;
       let raf = 0;
-      const poczatek = performance.now();
+      let uplyw = 0;
+      let ostatnia = performance.now();
 
       const petla = () => {
-        const uplyw = performance.now() - poczatek;
+        const teraz = performance.now();
+        uplyw += Math.min(teraz - ostatnia, MAKS_KLATKA_MS);
+        ostatnia = teraz;
         const czas = uplyw / MIN_MS;
         const gotowe = zrobione >= wszystkie;
         const sufit = 0.92 * (1 - Math.exp(-uplyw / (MIN_MS * 0.45)));
         const cel = gotowe ? czas : Math.min(czas, sufit);
-        biezacy += (cel - biezacy) * 0.09;
+        biezacy += Math.min((cel - biezacy) * 0.09, MAKS_KROK);
 
         const pokaz = cel >= 1 && biezacy > 0.995 ? 1 : biezacy;
         setProcent(Math.round(pokaz * 100));
