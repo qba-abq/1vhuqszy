@@ -75,12 +75,12 @@ export const site = {
     tekst: "#FFFFFF",
   },
   /* ——— STATUS LIVE ——————————————————————————————————————
-     Na razie mock. Podmiana na realny Twitch API: patrz components/ui/StatusLive.tsx */
+     Prawdziwy stan z Twitcha, sprawdzany w przeglądarce co `odswiezanieS`
+     sekund (szczegóły: lib/useStatusLive.ts). Podgląd plakietki „live"
+     bez streama: dopisz do adresu strony `?podglad-live`.              */
   live: {
-    mock: true,
-    czyLive: false,
-    tytulStreamu: "Halloweenowy stream: Outlast",
-    gra: "Outlast",
+    kanalTwitch: "hukszy",
+    odswiezanieS: 60,
   },
 
   /* ——— WYDAJNOŚĆ ————————————————————————————————————————
