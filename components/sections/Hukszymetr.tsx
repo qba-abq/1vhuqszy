@@ -480,7 +480,8 @@ export default function Hukszymetr() {
           role="tablist"
           aria-label="Wybierz stream"
           // tyle kolumn, ile streamów (3 albo 4): bez dziury w ostatnim rzędzie
-          className="mt-10 grid grid-cols-2 gap-2 sm:grid-cols-[repeat(var(--kolumny),minmax(0,1fr))]"
+          // na telefonie 2 kolumny; przy nieparzystej liczbie ostatnia zakładka na całą szerokość
+          className="mt-10 grid grid-cols-2 gap-2 sm:grid-cols-[repeat(var(--kolumny),minmax(0,1fr))] [&>*:last-child:nth-child(odd)]:col-span-2 sm:[&>*:last-child:nth-child(odd)]:col-span-1"
           data-wejscie
           style={{ opacity: 0, ["--kolumny" as string]: STREAMY.length }}
         >
@@ -544,7 +545,7 @@ export default function Hukszymetr() {
                   <button
                     type="button"
                     onClick={() => odtworz(s.najglosniejszy)}
-                    className="inline-flex items-center gap-1.5 rounded-full border border-huk-red/60 px-2.5 py-1 text-[0.7rem] font-semibold text-huk-t1 transition-colors hover:bg-huk-red/25"
+                    className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-huk-red/60 px-2 py-1 text-[0.66rem] font-semibold text-huk-t1 transition-colors hover:bg-huk-red/25 sm:px-2.5 sm:text-[0.7rem]"
                   >
                     {gra?.t === s.najglosniejszy.t ? "■ stop" : "▶ posłuchaj"}
                   </button>
