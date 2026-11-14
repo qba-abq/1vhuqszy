@@ -21,13 +21,18 @@ export const site = {
   ],
 
   /* ——— DOMENA / SEO ————————————————————————————————————— */
-  url: "https://hukszy.pl", // ← podmień na docelową domenę
+  /* Pełny adres, pod którym strona NAPRAWDĘ działa (bez ukośnika na końcu).
+     Z niego składa się link i obrazek w podglądzie linku na Messengerze,
+     Discordzie itd. Wcześniej stał tu hukszy.pl, pod którym nie ma strony,
+     więc podgląd nie miał miniatury. Po przeniesieniu na własną domenę
+     podmień tutaj i w DEPLOY_BASE w .github/workflows/pages.yml.        */
+  url: "https://qba-abq.github.io/1vhuqszy",
   seo: {
-    tytul: "HUKSZY | streamer, Twitch, klipy",
+    tytul: "HUKSZY · streamy na Twitchu i Kicku",
     opis:
-      "Oficjalna strona streamera HUKSZY. Harmonogram streamów, najlepsze klipy, " +
-      "Discord i social media. Live na twitch.tv/hukszy.",
-    slowaKluczowe: ["hukszy", "hukszytv", "streamer", "twitch", "polski streamer", "klipy"],
+      "Horrory, koopy z ekipą i spokojne wieczory w Red Dead. Harmonogram, " +
+      "klipy, Hukszymetr i merch. Live na twitch.tv/hukszy.",
+    slowaKluczowe: ["hukszy", "hukszytv", "streamer", "twitch", "kick", "polski streamer", "klipy"],
   },
 
   /* ——— KOLORY AKCENTOWE ————————————————————————————————
@@ -203,7 +208,6 @@ export const site = {
     /** Zdjęcie do sekcji „O mnie". Puste = pokazuje się sam kadr z sygnetem.
      *  Wgraj plik do /public/assets/postac i wpisz tu ścieżkę. */
     portret: "",  // puste = kadr pokazuje awatar kanału
-    og: "/assets/og/og.jpg",
     panele: {
       discord: "/assets/social/panel-discord.jpg",
       instagram: "/assets/social/panel-instagram.jpg",

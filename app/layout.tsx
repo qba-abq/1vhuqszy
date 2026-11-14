@@ -17,8 +17,21 @@ const montserrat = Montserrat({
   display: "swap",
 });
 
+/**
+ * Obrazek podglądu linku (app/og.png/route.tsx) jako PEŁNY adres.
+ * Względne „/og.png" + metadataBase gubiłoby ścieżkę /1vhuqszy z GitHub
+ * Pages (new URL("/og.png", ".../1vhuqszy") daje ...github.io/og.png).
+ */
+const obrazekPodgladu = {
+  url: `${site.url}/og.png`,
+  width: 1200,
+  height: 630,
+  alt: `${site.nick}: ${site.tagline}`,
+  type: "image/png",
+};
+
 export const metadata: Metadata = {
-  metadataBase: new URL(site.url),
+  metadataBase: new URL(`${site.url}/`),
   title: {
     default: site.seo.tytul,
     template: `%s | ${site.nick}`,
@@ -30,15 +43,17 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "pl_PL",
-    url: site.url,
+    url: `${site.url}/`,
     siteName: site.nick,
     title: site.seo.tytul,
     description: site.seo.opis,
+    images: [obrazekPodgladu],
   },
   twitter: {
     card: "summary_large_image",
     title: site.seo.tytul,
     description: site.seo.opis,
+    images: [obrazekPodgladu],
   },
   robots: { index: true, follow: true },
 };

@@ -65,7 +65,7 @@ podpisy i ceny ustawisz w `site.config.ts` → `sklep`.
 
 | Plik | Status | Wymiary | Format | Uwagi |
 |---|---|---|---|---|
-| `og.jpg` | ⬜ | 1200×630 | JPG | Obrazek do podglądu linku (Facebook / X / Discord). Dopóki go nie ma, generowany jest automatycznie z `app/opengraph-image.tsx`. |
+| (brak) | ✅ | 1200×630 | PNG | Obrazek podglądu linku generuje `app/og.png/route.tsx` z logotypu kanału; eksportuje się jako `og.png`. Własna grafika: podmień zawartość tego pliku. |
 
 ---
 
