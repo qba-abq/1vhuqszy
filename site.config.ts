@@ -132,14 +132,19 @@ export const site = {
   ],
 
   /* ——— HIGHLIGHTS / KLIPY ————————————————————————————————
-     miniatura: podmień plik w /public/assets/klipy (16:9, 1280×720) */
+     Klipy z twitch.tv/hukszy/clips. Klipy, w przeciwieństwie do VOD-ów,
+     nie wygasają, więc linki zostają żywe. Tytuły są oryginalne (nadali je
+     klipujący z czatu).
+     miniatura: kadr z klipu w /public/assets/klipy (16:9, 1280×720). Przy
+     wymianie sprawdź, czy w kadrze nie widać czatu z czymś, czego nie
+     chcesz na stronie (huKRZYK jest przycięty właśnie z tego powodu).      */
   klipy: [
-    { id: "vod-biped", tytul: "Biped z Kimusią", opis: "Biped · kolab", miniatura: "/assets/klipy/vod-biped.jpg", link: "https://www.twitch.tv/videos/2856077335" },
-    { id: "vod-overcooked", tytul: "4 osoby w kuchni, ale to nie MasterChef", opis: "Overcooked! 2", miniatura: "/assets/klipy/vod-overcooked.jpg", link: "https://www.twitch.tv/videos/2853548143" },
-    { id: "vod-jumpscare", tytul: "Jumpscare za jumpscare'em", opis: "Jumpscare Scare Jump", miniatura: "/assets/klipy/vod-jumpscare.jpg", link: "https://www.twitch.tv/videos/2852578308" },
-    { id: "vod-letsfib", tytul: "Let's fib: 100 follow = habanero", opis: "Challenge 🌶️", miniatura: "/assets/klipy/vod-letsfib.jpg", link: "https://www.twitch.tv/videos/2849663644" },
-    { id: "vod-impreza", tytul: "Impreza maszynowa, zapraszam", opis: "Live", miniatura: "/assets/klipy/vod-impreza.jpg", link: "https://www.twitch.tv/videos/2847130291" },
-    { id: "vod-kick", tytul: "Biped z Kimusią na Kicku", opis: "Kick · multistream", miniatura: "/assets/klipy/vod-kick-biped.webp", link: "https://kick.com/hukszy/videos" },
+    { id: "klip-hukrzyk", tytul: "huKRZYK", opis: "Outlast · Halloween", miniatura: "/assets/klipy/klip-hukrzyk.jpg", link: "https://www.twitch.tv/hukszy/clip/OptimisticAstuteAardvarkKreygasm-2V685W0Jy1rwDJdJ" },
+    { id: "klip-gorunc", tytul: "gorunc", opis: "MECCHA CHAMELEON", miniatura: "/assets/klipy/klip-gorunc.jpg", link: "https://www.twitch.tv/hukszy/clip/BovineSuaveTireLeeroyJenkins-E9kktrbyCY4PxvVy" },
+    { id: "klip-pawel-jumper", tytul: "PAWEŁ JUMPER", opis: "Backrooms · ekipa", miniatura: "/assets/klipy/klip-pawel-jumper.jpg", link: "https://www.twitch.tv/hukszy/clip/ThirstyPluckyDonkeyVoteNay-jl8XMBvdyP-u_Tff" },
+    { id: "klip-zolnierz", tytul: "wyglądam ci na żołnierza?", opis: "Battlefield 6", miniatura: "/assets/klipy/klip-zolnierz.jpg", link: "https://www.twitch.tv/hukszy/clip/SpicyEagerMinkMcaT-JogqIt8gSDIyy0hz" },
+    { id: "klip-pulapka", tytul: "PUŁAPKA", opis: "Sea of Thieves", miniatura: "/assets/klipy/klip-pulapka.jpg", link: "https://www.twitch.tv/hukszy/clip/HeadstrongCrunchyDiscOSsloth--TlBBhb9yIXW9LZe" },
+    { id: "klip-spot", tytul: "he knows a spot", opis: "SCP: Permafrost", miniatura: "/assets/klipy/klip-spot.jpg", link: "https://www.twitch.tv/hukszy/clip/IronicPuzzledStorkMrDestructoid-l36KnkPXMjYbPSDW" },
   ],
 
   /* ——— HUKSZYMETR ——————————————————————————————————————
