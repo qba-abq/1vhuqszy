@@ -70,6 +70,7 @@ const zmienneKolorow = `:root{
   --akcent-ciemny:${site.kolory.akcentCiemny};
   --akcent2:${site.kolory.akcent2};
   --akcent2-ciemny:${site.kolory.akcent2Ciemny};
+  --live:${site.kolory.live};
   --pow0:${site.kolory.pow0};
   --pow1:${site.kolory.pow1};
   --pow2:${site.kolory.pow2};

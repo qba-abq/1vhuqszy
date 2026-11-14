@@ -17,16 +17,16 @@ export default function StatusLive({ klasa = "" }: { klasa?: string }) {
     <>
       <span className="relative flex h-2.5 w-2.5 shrink-0">
         {czyLive && (
-          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-huk-red opacity-75" />
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-huk-live opacity-75" />
         )}
         <span
           className={`relative inline-flex h-2.5 w-2.5 rounded-full ${
-            czyLive ? "bg-huk-red" : status.stan === "sprawdzam" ? "animate-pulse bg-white/20" : "bg-white/30"
+            czyLive ? "bg-huk-live shadow-[0_0_8px_var(--live)]" : status.stan === "sprawdzam" ? "animate-pulse bg-white/20" : "bg-white/30"
           }`}
         />
       </span>
 
-      <span className={`podtytul ${czyLive ? "text-huk-white" : "text-huk-t2"}`}>
+      <span className={`podtytul ${czyLive ? "text-huk-live" : "text-huk-t2"}`}>
         {czyLive ? "live teraz" : status.stan === "sprawdzam" ? "sprawdzam…" : "offline"}
       </span>
 
@@ -42,7 +42,8 @@ export default function StatusLive({ klasa = "" }: { klasa?: string }) {
 
   const wyglad = `inline-flex items-center gap-3 border px-4 py-2 ${
     czyLive
-      ? "border-huk-red/60 bg-huk-red/10 shadow-neon transition-colors hover:bg-huk-red/20"
+      ? // zielony = aktywny teraz; to jedyne miejsce na stronie z tym kolorem
+        "border-huk-live/60 bg-huk-live/10 shadow-[0_0_14px_color-mix(in_srgb,var(--live)_35%,transparent)] transition-colors hover:bg-huk-live/20"
       : "border-huk-linia2 bg-huk-p2/60"
   } ${klasa}`;
 

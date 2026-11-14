@@ -11,8 +11,8 @@ import NaglowekSekcji from "@/components/ui/NaglowekSekcji";
    Format pliku opisuje scripts/hukszymetr-analiza.mjs. Wszystkie poziomy
    są w dB względem tła (typowego gadania), stąd „+18 dB nad tłem".       */
 
-/** audio: ścieżka do kilkusekundowego nagrania wokół szczytu (tylko kilka najgłośniejszych) */
-type Szczyt = { t: number; db: number; audio?: string };
+/** audio: kilkusekundowe nagranie wokół szczytu; opis: tytuł klipu czatu, z którego pochodzi moment */
+type Szczyt = { t: number; db: number; audio?: string; opis?: string };
 type DaneStreamu = {
   id: string;
   czasTrwania: number;
@@ -30,6 +30,8 @@ type Stream = DaneStreamu & {
   data: string;
   link: string;
   najglosniejszy: Szczyt;
+  /** co gra przycisk w kaflu: najgłośniejszy moment z klipu czatu, a bez klipów najgłośniejszy w ogóle */
+  polecany: Szczyt;
   /** sekunda szczytu -> miejsce w rankingu głośności (1 = najgłośniej) */
   ranking: Map<number, number>;
 };
@@ -51,6 +53,8 @@ const STREAMY: Stream[] = site.hukszymetr.streamy.flatMap((opis) => {
       ...s,
       ...opis,
       najglosniejszy: wgGlosnosci[0],
+      polecany:
+        wgGlosnosci.find((p) => p.opis && p.audio) ?? wgGlosnosci.find((p) => p.audio) ?? wgGlosnosci[0],
       ranking: new Map(wgGlosnosci.map((p, i) => [p.t, i + 1])),
     },
   ];
@@ -444,7 +448,8 @@ export default function Hukszymetr() {
   const wartoscKursora = g && kursor !== null ? g.pkt[kursor] : null;
   const xKursora = g && kursor !== null ? g.xKol(kursor) : 0;
   const dymekWLewo = xKursora > W - 210;
-  const opisTrafionego = trafiony ? PODPISY[s.id]?.[trafiony.t] : undefined;
+  const opisSzczytu = (p: Szczyt) => p.opis ?? PODPISY[s.id]?.[p.t];
+  const opisTrafionego = trafiony ? opisSzczytu(trafiony) : undefined;
   const maNagrania = s.szczyty.some((p) => p.audio);
 
   return (
@@ -540,14 +545,15 @@ export default function Hukszymetr() {
               </dt>
               <dd className="mt-1.5 font-display text-[1.3rem] leading-none text-huk-t1 sm:text-4xl">{k.wartosc}</dd>
               <dd className="mt-1.5 text-xs text-huk-t3">{k.dopisek}</dd>
-              {k.etykieta === "Najgłośniej" && s.najglosniejszy.audio && (
+              {k.etykieta === "Najgłośniej" && s.polecany.audio && (
                 <dd className="mt-2.5">
                   <button
                     type="button"
-                    onClick={() => odtworz(s.najglosniejszy)}
+                    onClick={() => odtworz(s.polecany)}
+                    title={s.polecany.opis ? `Klip czatu: ${s.polecany.opis}` : undefined}
                     className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full border border-huk-red/60 px-2 py-1 text-[0.66rem] font-semibold text-huk-t1 transition-colors hover:bg-huk-red/25 sm:px-2.5 sm:text-[0.7rem]"
                   >
-                    {gra?.t === s.najglosniejszy.t ? "■ stop" : "▶ posłuchaj"}
+                    {gra?.t === s.polecany.t ? "■ stop" : s.polecany.opis ? "▶ najlepszy krzyk" : "▶ posłuchaj"}
                   </button>
                 </dd>
               )}
@@ -801,7 +807,7 @@ export default function Hukszymetr() {
                   <span className="font-display text-base text-huk-t1 tabular-nums">{fmtDb(gra.db)}</span>
                   <span className="text-huk-t3">
                     {" "}
-                    · #{s.ranking.get(gra.t)} najgłośniejszy moment · {fmtCzas(gra.t)}
+                    · {opisSzczytu(gra) ? `„${opisSzczytu(gra)}”` : `#${s.ranking.get(gra.t)} najgłośniejszy moment`} · {fmtCzas(gra.t)}
                   </span>
                 </p>
                 <div className="mt-1.5 h-0.5 w-full bg-huk-linia2">
@@ -860,7 +866,7 @@ export default function Hukszymetr() {
                         )}
                       </td>
                       <td className="py-1.5 pr-4 text-huk-t1">{fmtDb(p.db)}</td>
-                      <td className="py-1.5 pr-4 text-huk-t3">{PODPISY[s.id]?.[p.t] ?? ""}</td>
+                      <td className="py-1.5 pr-4 text-huk-t3">{opisSzczytu(p) ?? ""}</td>
                       <td className="py-1.5 text-right">
                         {p.audio && (
                           <button

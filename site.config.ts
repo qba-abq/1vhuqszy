@@ -51,6 +51,11 @@ export const site = {
     akcent2: "#FFB020",
     akcent2Ciemny: "#B36F00",
 
+    /* ——— status LIVE ———————————————————————————————————————
+       Zielony = „aktywny teraz". Tylko plakietka live w hero; nigdzie
+       indziej go nie używamy, żeby nie rozmywał znaczenia.            */
+    live: "#22D36B",
+
     /* ——— powierzchnie ————————————————————————————————————
        Czysta czerń spłaszcza układ i męczy oczy, dlatego baza to ciemna
        szarość, a każdy kolejny poziom jest JAŚNIEJSZY (w ciemnym motywie

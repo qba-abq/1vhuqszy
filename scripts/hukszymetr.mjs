@@ -11,6 +11,9 @@
  * --nagrania N   ile najgłośniejszych szczytów wyciąć do odsłuchu (domyślnie wszystkie,
  *           0 = bez nagrań). Trafiają do public/assets/hukszymetr/.
  *
+ * Momenty z klipów czatu: scripts/hukszymetr-momenty.json (start + długość
+ * klipu w sekundach VOD-a). Dostają nagranie i tytuł klipu jako opis.
+ *
  * Wymaga ffmpeg (Windows: `winget install Gyan.FFmpeg`). Jeśli nie ma go
  * w PATH, wskaż plik zmienną FFMPEG=C:/.../ffmpeg.exe.
  *
@@ -23,17 +26,20 @@ import { spawn } from "node:child_process";
 import { readFileSync, writeFileSync, existsSync, mkdirSync, rmSync, readdirSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { licznikOkien, analizuj } from "./hukszymetr-analiza.mjs";
+import { licznikOkien, analizuj, OKNO_S } from "./hukszymetr-analiza.mjs";
 
 const KORZEN = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PLIK_DANYCH = join(KORZEN, "lib", "dane", "hukszymetr.json");
 const KATALOG_NAGRAN = join(KORZEN, "public", "assets", "hukszymetr");
+const PLIK_MOMENTOW = join(KORZEN, "scripts", "hukszymetr-momenty.json");
 const FFMPEG = process.env.FFMPEG || "ffmpeg";
 
 const CZESTOTLIWOSC = 8000; // do obwiedni głośności w zupełności wystarczy
 /** Nagranie zaczyna się chwilę PRZED szczytem: słychać, co doprowadziło do krzyku. */
 const NAGRANIE_PRZED_S = 3.5;
 const NAGRANIE_DLUGOSC_S = 6;
+/** Ciche nagranie nie dostanie więcej niż tyle wzmocnienia (szum by urósł). */
+const MAKS_WZMOCNIENIE_DB = 18;
 
 function argumenty(argv) {
   const wynik = { _: [] };
@@ -73,18 +79,35 @@ async function oknaZPliku(plik) {
   return licznik.koniec();
 }
 
+/** Szczytowy poziom (dBFS) fragmentu: filtr volumedetect wypisuje go na stderr. */
+function szczytFragmentu(plik, start) {
+  return new Promise((ok, blad) => {
+    const p = spawn(FFMPEG, [
+      "-hide_banner", "-ss", String(start), "-t", String(NAGRANIE_DLUGOSC_S), "-i", plik,
+      "-vn", "-af", "volumedetect", "-f", "null", "-",
+    ]);
+    let log = "";
+    p.stderr.on("data", (d) => (log += d));
+    p.on("error", blad);
+    p.on("close", () => ok(Number(log.match(/max_volume:\s*(-?[\d.]+) dB/)?.[1] ?? 0)));
+  });
+}
+
 /**
- * Wycina nagranie wokół szczytu. Głośność jest wyrównana (loudnorm) i
- * przycięta limiterem: jumpscare ma być słychać, ale nie ma rozsadzić
- * słuchawek komuś, kto kliknął z ciekawości.
+ * Wycina nagranie wokół szczytu i podgłaśnia je JEDNYM stałym wzmocnieniem,
+ * tak żeby szczyt doszedł do -1 dB. Wcześniej był tu loudnorm, który
+ * wyrównuje głośność w czasie: podbijał ciszę przed krzykiem o ~30 dB
+ * i krzyk ginął. Stałe wzmocnienie zachowuje dynamikę, a limit szczytu
+ * chroni słuchawki.
  */
 async function wytnijNagranie(plik, id, t) {
   const start = Math.max(0, t - NAGRANIE_PRZED_S);
   const nazwa = `${id}-${t}.m4a`;
+  const wzmocnienie = Math.min(MAKS_WZMOCNIENIE_DB, -1 - (await szczytFragmentu(plik, start)));
   await ffmpeg([
     "-y", "-ss", String(start), "-t", String(NAGRANIE_DLUGOSC_S), "-i", plik, "-vn",
     "-af", [
-      "loudnorm=I=-20:TP=-3:LRA=11",
+      `volume=${wzmocnienie.toFixed(1)}dB`,
       "afade=t=in:d=0.15",
       `afade=t=out:st=${NAGRANIE_DLUGOSC_S - 0.3}:d=0.3`,
     ].join(","),
@@ -92,6 +115,27 @@ async function wytnijNagranie(plik, id, t) {
     join(KATALOG_NAGRAN, nazwa),
   ]);
   return `/assets/hukszymetr/${nazwa}`;
+}
+
+/**
+ * Momenty z klipów czatu (scripts/hukszymetr-momenty.json): w oknie klipu
+ * szukamy najgłośniejszego pół sekundy i robimy z niego szczyt z tytułem
+ * klipu. Akustycznie krzyk nie zawsze jest najgłośniejszy (w horrorze
+ * dźwięki gry bywają głośniejsze), ale czat wie, gdzie był krzyk.
+ */
+function momentyZKlipow(id, okna, tloDbfs) {
+  if (!existsSync(PLIK_MOMENTOW)) return [];
+  const lista = JSON.parse(readFileSync(PLIK_MOMENTOW, "utf8"))[id] ?? [];
+  return lista.map(({ tytul, start, dlugosc }) => {
+    let najlepsze = Math.round(start / OKNO_S);
+    const koniec = Math.min(okna.length - 1, Math.round((start + dlugosc) / OKNO_S));
+    for (let i = najlepsze; i <= koniec; i++) if (okna[i] > okna[najlepsze]) najlepsze = i;
+    return {
+      t: Math.round(najlepsze * OKNO_S),
+      db: Math.round((okna[najlepsze] - tloDbfs) * 10) / 10,
+      opis: tytul,
+    };
+  });
 }
 
 /** Wstawia/podmienia stream po id. */
@@ -117,7 +161,18 @@ async function main() {
   const ileNagran = Number(arg.nagrania ?? Infinity);
 
   console.log(`[${arg.id}] analizuję ${plik}...`);
-  const wynik = analizuj(await oknaZPliku(plik));
+  const okna = await oknaZPliku(plik);
+  const wynik = analizuj(okna);
+
+  // momenty z klipów wypierają szczyty akustyczne w promieniu 30 s
+  const momenty = momentyZKlipow(arg.id, okna, wynik.tloDbfs);
+  if (momenty.length) {
+    wynik.szczyty = [
+      ...wynik.szczyty.filter((p) => momenty.every((m) => Math.abs(m.t - p.t) > 30)),
+      ...momenty,
+    ].sort((a, b) => a.t - b.t);
+    console.log(`[${arg.id}] momenty z klipów: ${momenty.map((m) => `${m.opis}@${m.t}s +${m.db}dB`).join(", ")}`);
+  }
 
   // stare nagrania tego streamu precz: szczyty mogły się przesunąć
   mkdirSync(KATALOG_NAGRAN, { recursive: true });

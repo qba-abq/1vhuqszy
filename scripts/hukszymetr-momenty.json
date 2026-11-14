@@ -1,0 +1,11 @@
+{
+  "_opis": "Momenty z klipów czatu (twitch.tv/hukszy/clips). start = sekunda VOD-a, w której zaczyna się klip (link 'Obejrzyj cały film' na stronie klipu, parametr t=), dlugosc = długość klipu w s. Skrypt szuka najgłośniejszego miejsca w tym oknie i stamtąd wycina nagranie z tytułem klipu. Krzyki, które czat uznał za warte klipa, to lepszy wybór niż najgłośniejszy dźwięk w ogóle (w horrorze to zwykle dźwięk gry).",
+  "outlast-halloween": [
+    { "tytul": "czego trzaskasz??", "start": 1781, "dlugosc": 30 },
+    { "tytul": "OPA PAPAPAPA", "start": 3028, "dlugosc": 17 },
+    { "tytul": "JAK JAK JAK JAK", "start": 8280, "dlugosc": 35 },
+    { "tytul": "huKRZYK", "start": 9769, "dlugosc": 60 },
+    { "tytul": "znowu wydarłem xd", "start": 9948, "dlugosc": 39 },
+    { "tytul": "sinister 1:1", "start": 11581, "dlugosc": 23 }
+  ]
+}

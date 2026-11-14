@@ -12,6 +12,7 @@
   --akcent-ciemny: #8a0400;
   --akcent2: #ffb020;
   --akcent2-ciemny: #b36f00;
+  --live: #22d36b;
   /* skala powierzchni: im wyzej w hierarchii, tym jasniej */
   --pow0: #101017;
   --pow1: #191921;
@@ -36,6 +37,7 @@
   --color-huk-white: var(--tekst);
   --color-huk-amber: var(--akcent2);
   --color-huk-amber-deep: var(--akcent2-ciemny);
+  --color-huk-live: var(--live);
   --color-huk-p0: var(--pow0);
   --color-huk-p1: var(--pow1);
   --color-huk-p2: var(--pow2);
