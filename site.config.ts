@@ -136,6 +136,22 @@ export const site = {
     { id: "vod-kick", tytul: "Biped z Kimusią na Kicku", opis: "Kick · multistream", miniatura: "/assets/klipy/vod-kick-biped.webp", link: "https://kick.com/hukszy/videos" },
   ],
 
+  /* ——— KRZYKOMETR ——————————————————————————————————————
+     Głośność całych VOD-ów, sekunda po sekundzie. Dane siedzą w
+     lib/dane/krzykometr.json i liczy je skrypt:
+       node scripts/krzykometr.mjs <plik VOD-a> --id vod-jumpscare
+     Każdy stream łączy się z wpisem w `klipy` po id (tytuł, gra, link).
+
+     mock: true  = dane przykładowe (scripts/krzykometr-demo.mjs), na stronie
+                   wisi plakietka, a szczyty NIE linkują do VOD-a.
+     mock: false = prawdziwe pomiary; klik w szczyt otwiera VOD w tej sekundzie.
+     podpisy: opisy szczytów po sekundzie streamu, widoczne w dymku i tabeli,
+              np. { "vod-jumpscare": { 552: "Pierwszy korytarz" } }          */
+  krzykometr: {
+    mock: true,
+    podpisy: {} as Record<string, Record<number, string>>,
+  },
+
   /* ——— SKLEP / MERCH ————————————————————————————————————
      linkSklepu pusty = przycisk "Zobacz cały sklep" prowadzi do donate
      (sklep w budowie).
