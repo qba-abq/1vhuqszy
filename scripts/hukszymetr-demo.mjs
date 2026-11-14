@@ -1,19 +1,22 @@
 #!/usr/bin/env node
 /**
- * Dane PRZYKŁADOWE dla Krzykometru, dopóki nie ma przeliczonych VOD-ów.
+ * Test rdzenia Hukszymetru na sztucznym sygnale, bez ffmpeg i bez VOD-ów.
  *
- *   node scripts/krzykometr-demo.mjs
+ *   node scripts/hukszymetr-demo.mjs            -> tylko statystyki
+ *   node scripts/hukszymetr-demo.mjs --zapisz   -> dane przykładowe do
+ *                                                 lib/dane/hukszymetr.json
  *
  * Syntezuje szum o zmiennej głośności (gadanie, pauzy, krzyki, wybuchy
  * śmiechu) według profilu gry i przepuszcza go przez TEN SAM rdzeń
- * analizy co prawdziwe nagrania. Przy okazji to test rdzenia: znane
- * zdarzenia muszą wyjść jako szczyty.
+ * analizy co prawdziwe nagrania. Znane zdarzenia muszą wyjść jako szczyty
+ * (np. finał habanero w profilu "vod-letsfib").
  *
- * Strona pokazuje te dane z plakietką „dane przykładowe"
- * (site.config.ts -> krzykometr.mock).
+ * --zapisz NADPISUJE prawdziwe dane o tych samych id, a na stronie pokażą się
+ * tylko streamy wpisane w site.config.ts -> hukszymetr.streamy. Przy danych
+ * przykładowych ustaw tam `mock: true` (plakietka, szczyty bez linków).
  */
-import { licznikOkien, analizuj } from "./krzykometr-analiza.mjs";
-import { zapiszStream } from "./krzykometr.mjs";
+import { licznikOkien, analizuj } from "./hukszymetr-analiza.mjs";
+import { zapiszStream } from "./hukszymetr.mjs";
 
 const HZ = 2000;
 const KROK_S = 0.1;
@@ -123,7 +126,7 @@ function syntezuj(p) {
 
 for (const p of PROFILE) {
   const wynik = analizuj(syntezuj(p));
-  zapiszStream({ id: p.id, data: p.data, ...wynik });
+  if (process.argv.includes("--zapisz")) zapiszStream({ id: p.id, data: p.data, ...wynik });
   const top = [...wynik.szczyty].sort((a, b) => b.db - a.db)[0];
   console.log(
     `${p.id.padEnd(16)} ${String(Math.round(wynik.czasTrwania / 60)).padStart(4)} min  ` +

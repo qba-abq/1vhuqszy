@@ -1,20 +1,34 @@
 /**
- * Rdzeń Krzykometru: surowe próbki audio -> obwiednia głośności + szczyty.
+ * Rdzeń Hukszymetru: surowe próbki audio -> obwiednia głośności + szczyty.
  *
  * Bez zależności i bez ffmpeg, żeby dało się go testować na syntetycznym
- * sygnale (scripts/krzykometr-demo.mjs) tym samym kodem, który liczy
- * prawdziwe VOD-y (scripts/krzykometr.mjs).
+ * sygnale (scripts/hukszymetr-demo.mjs) tym samym kodem, który liczy
+ * prawdziwe VOD-y (scripts/hukszymetr.mjs).
  *
- * Wszystkie poziomy są w dB WZGLĘDEM TŁA (mediany całego streamu), a nie
- * w „dB SPL". Plik audio nie wie, jak głośno było w pokoju; wie tylko,
- * o ile dany moment był głośniejszy od typowego gadania. Dlatego na stronie
- * piszemy „+18 dB nad tłem", nigdy „94 dB".
+ * Wszystkie poziomy są w dB WZGLĘDEM TŁA, a nie w „dB SPL". Plik audio nie
+ * wie, jak głośno było w pokoju; wie tylko, o ile dany moment był głośniejszy
+ * od typowego gadania. Dlatego na stronie piszemy „+18 dB nad tłem",
+ * nigdy „94 dB".
  */
+
+/**
+ * Tło = 75. percentyl głośności, nie mediana. Mediana prawdziwego streamu to
+ * często cisza i ambient gry (Outlast: -42 dBFS), więc „+12 dB nad medianą"
+ * łapało zwykłe głośniejsze zdanie i wychodziło ~100 „krzyków" na godzinę.
+ * Górna ćwiartka to mniej więcej poziom, na którym streamer normalnie gada.
+ */
+const PERCENTYL_TLA = 0.75;
 
 /** Długość okna RMS w sekundach. Pół sekundy łapie pojedynczy krzyk. */
 export const OKNO_S = 0.5;
 /** Ile dB nad tłem uznajemy za „krzyk". Ta sama wartość rysuje linię progu. */
 export const PROG_KRZYKU_DB = 12;
+/**
+ * Niższy próg dla szczytów pokazywanych na wykresie i do odsłuchu. Stream,
+ * w którym gada się równo głośno (Log Riders), ma mało „krzyków", ale wciąż
+ * ma swoje najgłośniejsze momenty i one też mają się pokazać.
+ */
+const PROG_SZCZYTU_DB = 8;
 /** Poniżej tego poziomu (dBFS) okno to cisza: nie wlicza się do tła. */
 const CISZA_DBFS = -60;
 /** Najniżej rysowany poziom względem tła (cisza = środek fali). */
@@ -53,10 +67,10 @@ function naDb(rms) {
   return rms > 0 ? 20 * Math.log10(rms) : -120;
 }
 
-function mediana(wartosci) {
+function percentyl(wartosci, q) {
   if (!wartosci.length) return CISZA_DBFS;
   const s = [...wartosci].sort((a, b) => a - b);
-  return s[Math.floor(s.length / 2)];
+  return s[Math.floor(q * (s.length - 1))];
 }
 
 /** Średnia krocząca o szerokości `szer` okien: jeden trzask myszką to jeszcze nie krzyk. */
@@ -76,15 +90,15 @@ function wygladz(okna, szer) {
 }
 
 /**
- * Szczyty: lokalne maksima co najmniej PROG_KRZYKU_DB nad tłem, oddalone od
+ * Szczyty: lokalne maksima co najmniej `prog` dB nad tłem, oddalone od
  * siebie o `odstepS`. Zwracamy najgłośniejsze `ile`, posortowane po czasie.
  */
-function znajdzSzczyty(wzgledne, { odstepS, ile }) {
+function znajdzSzczyty(wzgledne, { prog, odstepS, ile }) {
   const odstep = Math.round(odstepS / OKNO_S);
   const kandydaci = [];
   for (let i = 1; i < wzgledne.length - 1; i++) {
     const v = wzgledne[i];
-    if (v >= PROG_KRZYKU_DB && v >= wzgledne[i - 1] && v >= wzgledne[i + 1]) kandydaci.push(i);
+    if (v >= prog && v >= wzgledne[i - 1] && v >= wzgledne[i + 1]) kandydaci.push(i);
   }
   kandydaci.sort((a, b) => wzgledne[b] - wzgledne[a]);
 
@@ -103,14 +117,17 @@ function znajdzSzczyty(wzgledne, { odstepS, ile }) {
  */
 export function analizuj(okna, { punkty = 1200, ileSzczytow = 12 } = {}) {
   const czasTrwania = Math.round(okna.length * OKNO_S);
-  const tlo = mediana(Array.from(okna).filter((v) => v > CISZA_DBFS));
+  const tlo = percentyl(
+    Array.from(okna).filter((v) => v > CISZA_DBFS),
+    PERCENTYL_TLA,
+  );
 
   // 1 s wygładzenia na szczyty, surowe okna na obwiednię (tam liczy się ostrość)
   const wzgledne = wygladz(okna, 3).map((v) => v - tlo);
-  const { wszystkie, top } = znajdzSzczyty(wzgledne, { odstepS: 45, ile: ileSzczytow });
+  const { top } = znajdzSzczyty(wzgledne, { prog: PROG_SZCZYTU_DB, odstepS: 45, ile: ileSzczytow });
 
   // Krzyki na godzinę: osobne zdarzenia nad progiem, co najmniej 10 s od siebie.
-  const zdarzenia = znajdzSzczyty(wzgledne, { odstepS: 10, ile: Infinity }).wszystkie.length;
+  const zdarzenia = znajdzSzczyty(wzgledne, { prog: PROG_KRZYKU_DB, odstepS: 10, ile: Infinity }).wszystkie.length;
 
   // Obwiednia: maksimum w kubełku, żeby żaden krzyk nie zniknął przy zmniejszaniu.
   const krokOkien = Math.max(1, Math.ceil(okna.length / punkty));

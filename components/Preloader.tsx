@@ -37,7 +37,10 @@ export default function Preloader() {
       oznaczStart();
       return;
     }
-    sessionStorage.setItem(KLUCZ_SESJI, "1");
+    // Klucz sesji zapisujemy dopiero przy rozdarciu kurtyny (niżej), nie tutaj:
+    // React w trybie dev odpala ten efekt dwa razy, a drugi przebieg widział
+    // już „intro pokazane" i zdejmował preloader przy 0%. To samo spotykało
+    // kogoś, kto przeładował stronę w trakcie intro.
     document.body.style.overflow = "hidden";
 
     // Na telefonie intro jest krótsze — patrz komentarz w site.config.ts.
@@ -101,18 +104,28 @@ export default function Preloader() {
           "rozdarcie",
         )
         .add(() => {
+          sessionStorage.setItem(KLUCZ_SESJI, "1");
           document.body.style.overflow = "";
           oznaczStart();
         }, "rozdarcie+=0.3")
         .add(() => setAktywny(false));
 
-      /* —— licznik: wolniejsze z dwóch (pobieranie vs upływ czasu) —— */
+      /* —— licznik ——
+         Pasek zawsze płynie z czasem. Dopóki fonty i strona się ładują,
+         zwalnia asymptotycznie (nigdy nie dobija do 100% i nigdy nie stoi);
+         po załadowaniu dogania czas. Wcześniej brał min(zasoby, czas), a
+         zasoby to tylko 2 skoki (0 -> 50 -> 100%), więc przy wolnym `load`
+         stał na 0 i nagle przeskakiwał.                                    */
       let biezacy = 0;
       let raf = 0;
       const poczatek = performance.now();
 
       const petla = () => {
-        const cel = Math.min(zrobione / wszystkie, (performance.now() - poczatek) / MIN_MS);
+        const uplyw = performance.now() - poczatek;
+        const czas = uplyw / MIN_MS;
+        const gotowe = zrobione >= wszystkie;
+        const sufit = 0.92 * (1 - Math.exp(-uplyw / (MIN_MS * 0.45)));
+        const cel = gotowe ? czas : Math.min(czas, sufit);
         biezacy += (cel - biezacy) * 0.09;
 
         const pokaz = cel >= 1 && biezacy > 0.995 ? 1 : biezacy;

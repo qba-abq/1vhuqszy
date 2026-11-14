@@ -10,7 +10,7 @@ const POZYCJE = [
   { id: "o-mnie", etykieta: "O mnie" },
   { id: "harmonogram", etykieta: "Harmonogram" },
   { id: "klipy", etykieta: "Klipy" },
-  { id: "krzykometr", etykieta: "Krzykometr" },
+  { id: "hukszymetr", etykieta: "Hukszymetr" },
   { id: "sklep", etykieta: "Merch" },
   { id: "kontakt", etykieta: "Social" },
 ] as const;
@@ -46,6 +46,10 @@ export default function Nawigacja() {
           trigger: sekcja,
           start: "top 45%",
           end: "bottom 45%",
+          // Liczone PO pinie z Hero: ten trigger powstaje wcześniej (Nawigacja
+          // jest wyżej w drzewie), a bez tego ScrollTrigger mierzyłby sekcje
+          // bez odstępu pinu i podświetlał pozycję o kilka ekranów za wcześnie.
+          refreshPriority: -1,
           onToggle: (self) => self.isActive && setAktywna(id),
         });
       });

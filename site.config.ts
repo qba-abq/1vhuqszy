@@ -136,19 +136,29 @@ export const site = {
     { id: "vod-kick", tytul: "Biped z Kimusią na Kicku", opis: "Kick · multistream", miniatura: "/assets/klipy/vod-kick-biped.webp", link: "https://kick.com/hukszy/videos" },
   ],
 
-  /* ——— KRZYKOMETR ——————————————————————————————————————
-     Głośność całych VOD-ów, sekunda po sekundzie. Dane siedzą w
-     lib/dane/krzykometr.json i liczy je skrypt:
-       node scripts/krzykometr.mjs <plik VOD-a> --id vod-jumpscare
-     Każdy stream łączy się z wpisem w `klipy` po id (tytuł, gra, link).
+  /* ——— HUKSZYMETR ——————————————————————————————————————
+     Głośność całych VOD-ów, sekunda po sekundzie, plus nagrania
+     najgłośniejszych momentów do odsłuchu. Dane liczy skrypt:
+       node scripts/hukszymetr.mjs <plik VOD-a> --id outlast-halloween
+     i zapisuje je w lib/dane/hukszymetr.json (+ nagrania w
+     /public/assets/hukszymetr). `id` poniżej łączy wpis z danymi; kolejność
+     tutaj = kolejność zakładek. Stream bez policzonych danych się nie pokaże.
 
-     mock: true  = dane przykładowe (scripts/krzykometr-demo.mjs), na stronie
-                   wisi plakietka, a szczyty NIE linkują do VOD-a.
-     mock: false = prawdziwe pomiary; klik w szczyt otwiera VOD w tej sekundzie.
+     Twitch kasuje VOD-y po kilku tygodniach: link wtedy przestaje działać,
+     ale wykres i nagrania zostają (są w repo).
+
+     mock: true  = dane przykładowe (scripts/hukszymetr-demo.mjs --zapisz):
+                   plakietka na stronie, szczyty NIE linkują do VOD-a.
      podpisy: opisy szczytów po sekundzie streamu, widoczne w dymku i tabeli,
-              np. { "vod-jumpscare": { 552: "Pierwszy korytarz" } }          */
-  krzykometr: {
-    mock: true,
+              np. { "outlast-halloween": { 552: "Pierwszy korytarz" } }      */
+  hukszymetr: {
+    mock: false,
+    streamy: [
+      { id: "outlast-halloween", tytul: "Halloweenowy stream: Outlast", gra: "Outlast 👻", data: "2026-10-31", link: "https://www.twitch.tv/videos/2916058703" },
+      { id: "roblox-piatek13", tytul: "Piątek 13-ego, stream bez kamerki", gra: "ROBLOX", data: "2026-11-13", link: "https://www.twitch.tv/videos/2927877699" },
+      { id: "log-riders", tytul: "Czy uda nam się to przejść?!", gra: "Log Riders", data: "2026-11-07", link: "https://www.twitch.tv/videos/2922427837" },
+      { id: "satisfactory", tytul: "Satysfakcjonująca fabryka", gra: "Satisfactory", data: "2026-11-14", link: "https://www.twitch.tv/videos/2928834251" },
+    ],
     podpisy: {} as Record<string, Record<number, string>>,
   },
 

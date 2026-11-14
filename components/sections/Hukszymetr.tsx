@@ -2,19 +2,19 @@
 
 import { useCallback, useEffect, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { site } from "@/site.config";
-import dane from "@/lib/dane/krzykometr.json";
+import dane from "@/lib/dane/hukszymetr.json";
 import { gsap, ScrollTrigger, animujWejscie } from "@/lib/animacje";
 import { ruchOgraniczony } from "@/lib/useRuchDozwolony";
 import NaglowekSekcji from "@/components/ui/NaglowekSekcji";
 
 /* ——— dane ———————————————————————————————————————————————————————————
-   Format pliku opisuje scripts/krzykometr-analiza.mjs. Wszystkie poziomy
-   są w dB względem tła (mediany streamu), stąd „+18 dB nad tłem".        */
+   Format pliku opisuje scripts/hukszymetr-analiza.mjs. Wszystkie poziomy
+   są w dB względem tła (typowego gadania), stąd „+18 dB nad tłem".       */
 
-type Szczyt = { t: number; db: number };
+/** audio: ścieżka do kilkusekundowego nagrania wokół szczytu (tylko kilka najgłośniejszych) */
+type Szczyt = { t: number; db: number; audio?: string };
 type DaneStreamu = {
   id: string;
-  data?: string;
   czasTrwania: number;
   krok: number;
   tloDbfs: number;
@@ -27,25 +27,29 @@ type DaneStreamu = {
 type Stream = DaneStreamu & {
   tytul: string;
   gra: string;
+  data: string;
   link: string;
   najglosniejszy: Szczyt;
   /** sekunda szczytu -> miejsce w rankingu głośności (1 = najgłośniej) */
   ranking: Map<number, number>;
 };
 
-const MOCK = site.krzykometr.mock;
-const PODPISY: Record<string, Record<number, string>> = site.krzykometr.podpisy;
+const MOCK: boolean = site.hukszymetr.mock;
+/** Na GitHub Pages strona żyje pod /1vhuqszy, a <audio src> nie dostaje basePath sam. */
+const BAZA = process.env.NEXT_PUBLIC_BASE_PATH ?? "";
+/** Jumpscare w słuchawkach na 100% to przesada. Nagrania są i tak wyrównane loudnormem. */
+const GLOSNOSC_ODTWARZANIA = 0.8;
+const PODPISY: Record<string, Record<number, string>> = site.hukszymetr.podpisy;
 
-const STREAMY: Stream[] = (dane.streamy as DaneStreamu[]).flatMap((s) => {
-  const klip = site.klipy.find((k) => k.id === s.id);
-  if (!klip || !s.szczyty.length) return [];
+/** Kolejność i opisy z site.config, liczby z JSON-a; stream bez danych pomijamy. */
+const STREAMY: Stream[] = site.hukszymetr.streamy.flatMap((opis) => {
+  const s = (dane.streamy as DaneStreamu[]).find((d) => d.id === opis.id);
+  if (!s || !s.szczyty.length) return [];
   const wgGlosnosci = [...s.szczyty].sort((a, b) => b.db - a.db);
   return [
     {
       ...s,
-      tytul: klip.tytul,
-      gra: klip.opis,
-      link: klip.link,
+      ...opis,
       najglosniejszy: wgGlosnosci[0],
       ranking: new Map(wgGlosnosci.map((p, i) => [p.t, i + 1])),
     },
@@ -155,15 +159,20 @@ function MiniFala({ s }: { s: Stream }) {
 
 /* ——— sekcja ——————————————————————————————————————————————————————— */
 
-export default function Krzykometr() {
+export default function Hukszymetr() {
   const sekcja = useRef<HTMLElement>(null);
   const ramka = useRef<HTMLDivElement>(null);
   const klip = useRef<SVGRectElement>(null);
   const glowica = useRef<SVGGElement>(null);
   const kropka = useRef<SVGCircleElement>(null);
   const odczyt = useRef<HTMLSpanElement>(null);
+  const pierscien = useRef<SVGCircleElement>(null);
+  const pasekPostepu = useRef<HTMLDivElement>(null);
+  const audio = useRef<HTMLAudioElement | null>(null);
+  const analizator = useRef<{ ctx: AudioContext; an: AnalyserNode; buf: Float32Array<ArrayBuffer> } | null>(null);
 
   const [aktywny, setAktywny] = useState(0);
+  const [gra, setGra] = useState<Szczyt | null>(null);
   const [W, setW] = useState(0);
   const [H, setH] = useState(300);
   const [kursor, setKursor] = useState<number | null>(null);
@@ -261,8 +270,93 @@ export default function Krzykometr() {
     };
   }, [rysuj]);
 
+  /* ——— dźwięk ——— */
+
+  const zatrzymaj = useCallback(() => {
+    audio.current?.pause();
+    setGra(null);
+  }, []);
+
+  const odtworz = (p: Szczyt) => {
+    if (!p.audio) return;
+    if (gra?.t === p.t) return zatrzymaj();
+
+    let el = audio.current;
+    if (!el) {
+      el = new Audio();
+      el.preload = "auto";
+      el.volume = GLOSNOSC_ODTWARZANIA;
+      el.addEventListener("ended", () => setGra(null));
+      audio.current = el;
+    }
+    // Analizator tylko po to, żeby pierścień przy szczycie pulsował z dźwiękiem.
+    // AudioContext wolno utworzyć dopiero po geście użytkownika, stąd tutaj.
+    try {
+      if (!analizator.current) {
+        const Ctx =
+          window.AudioContext ?? (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+        const ctx = new Ctx();
+        const an = ctx.createAnalyser();
+        an.fftSize = 1024;
+        ctx.createMediaElementSource(el).connect(an);
+        an.connect(ctx.destination);
+        analizator.current = { ctx, an, buf: new Float32Array(an.fftSize) };
+      }
+      void analizator.current.ctx.resume();
+    } catch {
+      // bez analizatora dźwięk i tak gra, tylko pierścień stoi w miejscu
+    }
+    el.src = `${BAZA}${p.audio}`;
+    el.play().catch(() => setGra(null));
+    setGra(p);
+  };
+
+  /** Klik w szczyt: nagranie, jeśli jest; inaczej VOD w tej sekundzie. */
+  const aktywuj = (p: Szczyt | null) => {
+    if (!p) return;
+    if (p.audio) odtworz(p);
+    else otworzMoment(p);
+  };
+
+  // pierścień oddycha głośnością, pasek postępu jedzie z nagraniem
+  useEffect(() => {
+    if (!gra) return;
+    const spokojnie = ruchOgraniczony();
+    let raf = 0;
+    const klatka = () => {
+      const a = analizator.current;
+      let poziom = 0.3;
+      if (a && !spokojnie) {
+        a.an.getFloatTimeDomainData(a.buf);
+        let suma = 0;
+        for (let i = 0; i < a.buf.length; i++) suma += a.buf[i] * a.buf[i];
+        poziom = Math.min(1, Math.sqrt(suma / a.buf.length) * 4);
+      }
+      if (pierscien.current) {
+        pierscien.current.setAttribute("r", (9 + poziom * 30).toFixed(1));
+        pierscien.current.style.opacity = (0.3 + poziom * 0.7).toFixed(2);
+      }
+      const el = audio.current;
+      if (pasekPostepu.current && el?.duration) {
+        pasekPostepu.current.style.transform = `scaleX(${(el.currentTime / el.duration).toFixed(3)})`;
+      }
+      raf = requestAnimationFrame(klatka);
+    };
+    raf = requestAnimationFrame(klatka);
+    return () => cancelAnimationFrame(raf);
+  }, [gra]);
+
+  useEffect(
+    () => () => {
+      audio.current?.pause();
+      void analizator.current?.ctx.close();
+    },
+    [],
+  );
+
   const zmienStream = (i: number) => {
     if (i === aktywny) return;
+    zatrzymaj();
     setAktywny(i);
     setKursor(null);
     if (widoczny.current) {
@@ -322,7 +416,7 @@ export default function Krzykometr() {
       e.preventDefault();
       setKursor(Math.max(0, Math.min(g.kol - 1, ruch[e.key])));
     } else if (e.key === "Enter") {
-      otworzMoment(trafiony);
+      aktywuj(trafiony);
     } else if (e.key === "Escape") {
       setKursor(null);
     }
@@ -351,23 +445,25 @@ export default function Krzykometr() {
   const xKursora = g && kursor !== null ? g.xKol(kursor) : 0;
   const dymekWLewo = xKursora > W - 210;
   const opisTrafionego = trafiony ? PODPISY[s.id]?.[trafiony.t] : undefined;
+  const maNagrania = s.szczyty.some((p) => p.audio);
 
   return (
     <section
       ref={sekcja}
-      id="krzykometr"
+      id="hukszymetr"
       className="relative overflow-hidden bg-huk-p1/92 px-6 py-24 sm:py-32"
-      aria-label="Krzykometr: głośność streamów"
+      aria-label="Hukszymetr: głośność streamów"
     >
       <div className="halftone pointer-events-none absolute right-8 top-16 h-32 w-32 opacity-15" />
 
       <div className="mx-auto max-w-6xl">
-        <NaglowekSekcji nadtytul="streamy, które słychać">Krzykometr</NaglowekSekcji>
+        <NaglowekSekcji nadtytul="streamy, które słychać">Hukszymetr</NaglowekSekcji>
 
         <div className="mt-6 flex flex-wrap items-end justify-between gap-4" data-wejscie style={{ opacity: 0 }}>
           <p className="max-w-2xl text-base leading-relaxed text-huk-t2 sm:text-lg">
-            Głośność całego streamu, od pierwszej do ostatniej minuty. Każdy szczyt to krzyk,
-            jumpscare albo wybuch śmiechu. Im wyżej, tym bardziej poniosło.
+            Głośność całego streamu, od pierwszej do ostatniej minuty, zmierzona z VOD-a. Szczyty to
+            najgłośniejsze momenty: krzyki, jumpscare&apos;y, wybuchy śmiechu. Pełne kropki da się
+            odsłuchać.
           </p>
           {MOCK && (
             <span
@@ -383,9 +479,10 @@ export default function Krzykometr() {
         <div
           role="tablist"
           aria-label="Wybierz stream"
-          className="mt-10 grid grid-cols-2 gap-2 lg:grid-cols-4"
+          // tyle kolumn, ile streamów (3 albo 4): bez dziury w ostatnim rzędzie
+          className="mt-10 grid grid-cols-2 gap-2 sm:grid-cols-[repeat(var(--kolumny),minmax(0,1fr))]"
           data-wejscie
-          style={{ opacity: 0 }}
+          style={{ opacity: 0, ["--kolumny" as string]: STREAMY.length }}
         >
           {STREAMY.map((st, i) => {
             const wybrany = i === aktywny;
@@ -394,7 +491,7 @@ export default function Krzykometr() {
                 key={st.id}
                 role="tab"
                 aria-selected={wybrany}
-                aria-controls="krzykometr-wykres"
+                aria-controls="hukszymetr-wykres"
                 onClick={() => zmienStream(i)}
                 className={`group border px-4 pb-3 pt-3.5 text-left transition-colors duration-300 ${
                   wybrany
@@ -442,6 +539,17 @@ export default function Krzykometr() {
               </dt>
               <dd className="mt-1.5 font-display text-[1.3rem] leading-none text-huk-t1 sm:text-4xl">{k.wartosc}</dd>
               <dd className="mt-1.5 text-xs text-huk-t3">{k.dopisek}</dd>
+              {k.etykieta === "Najgłośniej" && s.najglosniejszy.audio && (
+                <dd className="mt-2.5">
+                  <button
+                    type="button"
+                    onClick={() => odtworz(s.najglosniejszy)}
+                    className="inline-flex items-center gap-1.5 rounded-full border border-huk-red/60 px-2.5 py-1 text-[0.7rem] font-semibold text-huk-t1 transition-colors hover:bg-huk-red/25"
+                  >
+                    {gra?.t === s.najglosniejszy.t ? "■ stop" : "▶ posłuchaj"}
+                  </button>
+                </dd>
+              )}
             </div>
           ))}
         </dl>
@@ -461,9 +569,18 @@ export default function Krzykometr() {
                 </>
               ) : (
                 <span>
-                  <span className="hidden sm:inline">Najedź na falę</span>
-                  <span className="sm:hidden">Przesuń palcem po fali</span>
-                  {MOCK ? "" : ", kliknij szczyt, żeby obejrzeć ten moment"}
+                  {maNagrania ? (
+                    <>
+                      <span className="hidden sm:inline">Kliknij pełną kropkę, żeby usłyszeć ten moment</span>
+                      <span className="sm:hidden">Dotknij pełnej kropki, żeby posłuchać</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="hidden sm:inline">Najedź na falę</span>
+                      <span className="sm:hidden">Przesuń palcem po fali</span>
+                      {MOCK ? "" : ", kliknij szczyt, żeby obejrzeć ten moment"}
+                    </>
+                  )}
                 </span>
               )}
             </span>
@@ -538,15 +655,28 @@ export default function Krzykometr() {
                   {s.szczyty.map((p) => {
                     const x = g.xCzasu(p.t);
                     const y = yKolumny(g, p.t, p.db);
-                    const aktywnyPunkt = trafiony?.t === p.t;
+                    const aktywnyPunkt = trafiony?.t === p.t || gra?.t === p.t;
                     return (
                       <g key={p.t}>
+                        {gra?.t === p.t && (
+                          <circle
+                            ref={pierscien}
+                            cx={x}
+                            cy={y}
+                            r={9}
+                            fill="none"
+                            stroke="var(--akcent-jasny)"
+                            strokeWidth={2}
+                            style={{ filter: "drop-shadow(0 0 6px var(--akcent))" }}
+                          />
+                        )}
+                        {/* pełna kropka = jest nagranie do odsłuchu, pusta = tylko pomiar */}
                         <circle
                           cx={x}
                           cy={y}
-                          r={aktywnyPunkt ? 6 : 4}
-                          fill={aktywnyPunkt ? "var(--akcent-jasny)" : "var(--pow0)"}
-                          stroke="var(--akcent-jasny)"
+                          r={aktywnyPunkt ? 6 : p.audio ? 5 : 4}
+                          fill={p.audio ? "var(--akcent-jasny)" : "var(--pow0)"}
+                          stroke={aktywnyPunkt ? "var(--tekst1)" : "var(--akcent-jasny)"}
                           strokeWidth={2}
                         />
                         {podpisane.includes(p.t) && (
@@ -595,7 +725,7 @@ export default function Krzykometr() {
 
             {/* warstwa interakcji: większa niż fala, wskaźnik i klawiatura */}
             <div
-              id="krzykometr-wykres"
+              id="hukszymetr-wykres"
               role="slider"
               tabIndex={0}
               aria-label="Pozycja na osi czasu streamu. Strzałki przesuwają, Enter otwiera szczyt."
@@ -608,12 +738,12 @@ export default function Krzykometr() {
                   : "brak zaznaczenia"
               }
               className={`absolute inset-0 touch-pan-y outline-none focus-visible:ring-1 focus-visible:ring-huk-red/70 ${
-                trafiony && !MOCK ? "cursor-pointer" : "cursor-crosshair"
+                trafiony && (trafiony.audio || !MOCK) ? "cursor-pointer" : "cursor-crosshair"
               }`}
               onPointerMove={naRuch}
               onPointerDown={naRuch}
               onPointerLeave={(e) => e.pointerType === "mouse" && setKursor(null)}
-              onClick={() => otworzMoment(trafiony)}
+              onClick={() => aktywuj(trafiony)}
               onKeyDown={naKlawisz}
               onFocus={() => g && kursor === null && !rysuje && setKursor(g.kolCzasu(s.najglosniejszy.t))}
               onBlur={() => setKursor(null)}
@@ -638,12 +768,57 @@ export default function Krzykometr() {
                   <p className="mt-1.5 border-t border-huk-linia pt-1.5 text-xs text-huk-t2">
                     <span className="mr-1.5 inline-block h-0.5 w-3 bg-huk-red-hot align-middle" />
                     {opisTrafionego ?? `#${s.ranking.get(trafiony.t)} najgłośniejszy moment`}
-                    {!MOCK && <span className="mt-0.5 block text-huk-red-hot">▶ kliknij, by obejrzeć</span>}
+                    {trafiony.audio ? (
+                      <span className="mt-0.5 block text-huk-red-hot">
+                        {gra?.t === trafiony.t ? "■ kliknij, by zatrzymać" : "▶ kliknij, by usłyszeć"}
+                      </span>
+                    ) : (
+                      !MOCK && <span className="mt-0.5 block text-huk-t3">↗ kliknij, by obejrzeć na Twitchu</span>
+                    )}
                   </p>
                 )}
               </div>
             )}
           </div>
+
+          {/* teraz gra: stop, postęp, link do pełnego momentu na Twitchu */}
+          {gra && (
+            <div
+              className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-huk-linia bg-huk-red/[0.06] px-4 py-3 sm:px-5"
+              aria-live="polite"
+            >
+              <button
+                type="button"
+                onClick={zatrzymaj}
+                aria-label="Zatrzymaj nagranie"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-huk-red/70 bg-huk-red/20 text-huk-t1 shadow-neon transition-colors hover:bg-huk-red/40"
+              >
+                <span className="block h-2.5 w-2.5 bg-current" />
+              </button>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm text-huk-t2">
+                  <span className="font-display text-base text-huk-t1 tabular-nums">{fmtDb(gra.db)}</span>
+                  <span className="text-huk-t3">
+                    {" "}
+                    · #{s.ranking.get(gra.t)} najgłośniejszy moment · {fmtCzas(gra.t)}
+                  </span>
+                </p>
+                <div className="mt-1.5 h-0.5 w-full bg-huk-linia2">
+                  <div ref={pasekPostepu} className="h-full origin-left bg-huk-red-hot" style={{ transform: "scaleX(0)" }} />
+                </div>
+              </div>
+              {!MOCK && (
+                <a
+                  href={linkWChwili(s.link, gra.t)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="shrink-0 text-xs text-huk-t2 underline decoration-huk-red/60 underline-offset-4 hover:text-huk-t1"
+                >
+                  Obejrzyj na Twitchu ↗
+                </a>
+              )}
+            </div>
+          )}
 
           {/* widok tabeli: każda wartość z dymka dostępna bez najeżdżania */}
           <details className="group border-t border-huk-linia px-4 py-3 text-sm sm:px-5">
@@ -657,7 +832,10 @@ export default function Krzykometr() {
                   <th className="py-1.5 pr-4 font-normal">#</th>
                   <th className="py-1.5 pr-4 font-normal">Moment</th>
                   <th className="py-1.5 pr-4 font-normal">Nad tłem</th>
-                  <th className="py-1.5 font-normal">Opis</th>
+                  <th className="py-1.5 pr-4 font-normal">Opis</th>
+                  <th className="py-1.5 font-normal">
+                    <span className="sr-only">Odsłuch</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -681,7 +859,19 @@ export default function Krzykometr() {
                         )}
                       </td>
                       <td className="py-1.5 pr-4 text-huk-t1">{fmtDb(p.db)}</td>
-                      <td className="py-1.5 text-huk-t3">{PODPISY[s.id]?.[p.t] ?? ""}</td>
+                      <td className="py-1.5 pr-4 text-huk-t3">{PODPISY[s.id]?.[p.t] ?? ""}</td>
+                      <td className="py-1.5 text-right">
+                        {p.audio && (
+                          <button
+                            type="button"
+                            onClick={() => odtworz(p)}
+                            className="text-xs text-huk-red-hot hover:text-huk-t1"
+                            aria-label={`${gra?.t === p.t ? "Zatrzymaj" : "Odsłuchaj"} moment ${fmtCzas(p.t)}`}
+                          >
+                            {gra?.t === p.t ? "■ stop" : "▶ odsłuchaj"}
+                          </button>
+                        )}
+                      </td>
                     </tr>
                   ))}
               </tbody>
