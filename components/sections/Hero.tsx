@@ -192,14 +192,10 @@ export default function Hero() {
         ref={tresc}
         className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center"
       >
-        {/* na telefonie bez kresek, bez „streamer" i ciaśniej: pięć słów
-            rozstrzelonych na 0.32em inaczej łamie się na dwie linie */}
         <div data-wejscie className="kreski mb-6 justify-center">
-          <span className="linia-akcent hidden h-px w-10 sm:block sm:w-16" />
-          <span className="podtytul whitespace-nowrap text-[0.64rem] tracking-[0.2em] text-huk-red sm:text-[0.72rem] sm:tracking-[0.32em]">
-            <span className="hidden sm:inline">streamer · </span>twitch · kick · youtube · tiktok
-          </span>
-          <span className="linia-akcent hidden h-px w-10 sm:block sm:w-16" />
+          <span className="linia-akcent h-px w-4 sm:w-16" />
+          <span className="podtytul whitespace-nowrap text-huk-red">streamer · twitch · kick</span>
+          <span className="linia-akcent h-px w-4 sm:w-16" />
         </div>
 
         {/* Prawdziwy logotyp kanału (baner z Twitcha); h1 zostaje dla SEO. */}
