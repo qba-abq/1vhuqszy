@@ -30,17 +30,23 @@ export default function StatusLive({ klasa = "" }: { klasa?: string }) {
         {czyLive ? "live teraz" : status.stan === "sprawdzam" ? "sprawdzam…" : "offline"}
       </span>
 
+      {/* na telefonie szczegóły schodzą do osobnych linii i się zawijają
+          (wcześniej ucinało grę po 16 znakach, a tytułu nie było wcale);
+          od sm: jedna linia obok „live teraz", długi tytuł z wielokropkiem */}
       {status.stan === "live" && (
-        <span className="max-w-[16ch] truncate border-l border-huk-linia2 pl-3 text-xs text-huk-t2 sm:max-w-[42ch]">
-          {status.gra}
+        <span className="basis-full text-left text-xs text-huk-t2 sm:max-w-[42ch] sm:basis-auto sm:truncate sm:border-l sm:border-huk-linia2 sm:pl-3">
+          <span className="font-semibold text-huk-t1 sm:font-normal sm:text-huk-t2">{status.gra}</span>
           <span className="text-huk-t3"> · od {status.od}</span>
-          <span className="hidden sm:inline"> · {status.tytul}</span>
+          <span className="mt-0.5 block break-words sm:mt-0 sm:inline">
+            <span className="hidden sm:inline"> · </span>
+            {status.tytul}
+          </span>
         </span>
       )}
     </>
   );
 
-  const wyglad = `inline-flex items-center gap-3 border px-4 py-2 ${
+  const wyglad = `inline-flex max-w-full flex-wrap items-center gap-x-3 gap-y-1.5 border px-4 py-2 sm:flex-nowrap ${
     czyLive
       ? // zielony = aktywny teraz; to jedyne miejsce na stronie z tym kolorem
         "border-huk-live/60 bg-huk-live/10 shadow-[0_0_14px_color-mix(in_srgb,var(--live)_35%,transparent)] transition-colors hover:bg-huk-live/20"
