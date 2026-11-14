@@ -9,12 +9,15 @@ export const site = {
   nick: "HUKSZY",
   handle: "HUKSZYTV",
   tagline: "Streamy, które słychać",
+  /* Teksty oparte na tym, co faktycznie dzieje się na kanale (stan na
+     14.11.2026): VOD-y i klipy z Twitcha, panele kanału, kanał YouTube
+     i ostatnie kategorie na Kicku. Przy zmianie gier odśwież wymienione tytuły. */
   opis:
-    "Gram głośno, tnę szybko i nie udaję, że wiem co robię. " +
-    "Wpadaj na live po hałas, memy i horrory, przy których razem będziemy się bać.",
+    "Horrory, przy których drę się głośniej niż gra, koopy z ekipą " +
+    "i spokojne wieczory w Red Dead. Gramy gęsto, wpadaj na live.",
   bio: [
-    "Cześć, jestem HUKSZY. Streamuję trzy razy w tygodniu: horrory, przy których krzyczę głośniej niż gra, i kooperacyjny chaos w stylu Overcooked 2 albo Biped, gdzie razem z ekipą sabotujemy sobie życie.",
-    "Do tego challenge dla społeczności (100 follow = habanero na żywo), kolaby z innymi twórcami i memy. Nadaję równolegle na Twitchu i Kicku. Wpadaj, jesteś u siebie.",
+    "Cześć, tu Hukszy. Streamuję na Twitchu zwykle trzy razy w tygodniu: we wtorek po południu na luzie, w piątek i sobotę wieczorem na dłużej. Gram różnie: horrory jak Outlast, Backrooms czy SCP: Permafrost, przy których krzyczę głośniej niż gra, kooperacyjny chaos w Log Riders, Biped albo Overcooked 2, a na odpoczynek Red Dead Redemption 2 i budowanie fabryki w Satisfactory.",
+    "Ze streamów robi się ekipa: wspólne granie z widzami, kolaby z Kimusią i Kapitanem Flamingo, memy na Discordzie i challenge'e (było już „100 follow = habanero”). Najlepsze akcje lądują na YouTube i TikToku, czasem nadaję też na Kicku. Wpadaj, jesteś u siebie.",
   ],
 
   /* ——— DOMENA / SEO ————————————————————————————————————— */
@@ -71,8 +74,8 @@ export const site = {
   live: {
     mock: true,
     czyLive: false,
-    tytulStreamu: "Horrory z widzami: kto pierwszy krzyknie",
-    gra: "Phasmophobia",
+    tytulStreamu: "Halloweenowy stream: Outlast",
+    gra: "Outlast",
   },
 
   /* ——— WYDAJNOŚĆ ————————————————————————————————————————
@@ -94,34 +97,37 @@ export const site = {
   },
 
   /* ——— LINKI ————————————————————————————————————————— */
+  /* Linki zgodne z panelami kanału na Twitchu (twitch.tv/hukszy/about). */
   linki: {
     twitch: "https://twitch.tv/hukszy",
     kick: "https://kick.com/hukszy",
     youtube: "https://youtube.com/@hukszytv",
     instagram: "https://instagram.com/hukszytv",
-    tiktok: "https://tiktok.com/@hukszytv",
-    discord: "https://discord.gg/hukszytv",
-    donate: "https://tipply.pl/@hukszytv",
+    tiktok: "https://www.tiktok.com/@hukszy3",
+    discord: "https://discord.gg/cmsz7rwgu",
+    donate: "https://streamelements.com/hukszy/tip",
     email: "kontakt@hukszy.pl",
   },
 
   /* ——— STATYSTYKI (animowane liczniki) ——————————————————— */
   statystyki: [
     { etykieta: "Streamy w tygodniu", wartosc: 3, sufiks: "" },
-    { etykieta: "Godziny na jednym live", wartosc: 3, sufiks: "h" },
-    { etykieta: "Platformy równolegle", wartosc: 2, sufiks: "" },
-    { etykieta: "Gier w rotacji", wartosc: 5, sufiks: "+" },
+    { etykieta: "Godzin na najdłuższym live", wartosc: 5, sufiks: "+" }, // Outlast, 31.10: 5 h 30 min
+    { etykieta: "Horrorów na koncie", wartosc: 5, sufiks: "+" }, // Outlast, Backrooms, SCP: Permafrost, The Night Shift, Jumpscare Scare Jump
+    { etykieta: "Gier na streamach", wartosc: 15, sufiks: "+" },
   ],
 
   /* ——— HARMONOGRAM ——————————————————————————————————————
-     godziny: null = dzień wolny (karta wyszarzona)                */
+     godziny: null = dzień wolny (karta wyszarzona)
+     Na Twitchu nie ma ustawionego harmonogramu; godziny wzięte ze startów
+     VOD-ów z października i listopada 2026 (wt ~16:00, pt i sb ~20:00).     */
   harmonogram: [
     { skrot: "PN", dzien: "Poniedziałek", godziny: null },
-    { skrot: "WT", dzien: "Wtorek", godziny: { od: "17:00", do: "20:00" }, opis: "Rozgrzewka tygodnia" },
+    { skrot: "WT", dzien: "Wtorek", godziny: { od: "16:00", do: "19:00" }, opis: "Na luzie: Red Dead, Roblox" },
     { skrot: "ŚR", dzien: "Środa", godziny: null },
     { skrot: "CZ", dzien: "Czwartek", godziny: null },
-    { skrot: "PT", dzien: "Piątek", godziny: { od: "21:00", do: "24:00" }, opis: "Horror night" },
-    { skrot: "SB", dzien: "Sobota", godziny: { od: "21:00", do: "24:00" }, opis: "Granie z widzami" },
+    { skrot: "PT", dzien: "Piątek", godziny: { od: "20:00", do: "24:00" }, opis: "Wieczorne granie z ekipą" },
+    { skrot: "SB", dzien: "Sobota", godziny: { od: "20:00", do: "24:00" }, opis: "Długi live: horrory i koopy" },
     { skrot: "ND", dzien: "Niedziela", godziny: null },
   ],
 

@@ -22,11 +22,11 @@ const SKOS =
 
 const KANALY = [
   { nazwa: "Twitch", opis: "streamy na żywo", href: site.linki.twitch, Ikona: IkonaTwitch },
-  { nazwa: "Kick", opis: "ten sam live, druga scena", href: site.linki.kick, Ikona: IkonaKick },
-  { nazwa: "Discord", opis: "społeczność i powiadomienia", href: site.linki.discord, Ikona: IkonaDiscord },
-  { nazwa: "Instagram", opis: "kulisy i updaty", href: site.linki.instagram, Ikona: IkonaInstagram },
-  { nazwa: "YouTube", opis: "pełne odcinki", href: site.linki.youtube, Ikona: IkonaYouTube },
-  { nazwa: "TikTok", opis: "krótkie klipy", href: site.linki.tiktok, Ikona: IkonaTikTok },
+  { nazwa: "Kick", opis: "czasem nadaję też tutaj", href: site.linki.kick, Ikona: IkonaKick },
+  { nazwa: "Discord", opis: "powiadomienia, granie z widzami, memy", href: site.linki.discord, Ikona: IkonaDiscord },
+  { nazwa: "Instagram", opis: "kulisy, zapowiedzi i zajawki", href: site.linki.instagram, Ikona: IkonaInstagram },
+  { nazwa: "YouTube", opis: "gameplaye i akcje ze streamów", href: site.linki.youtube, Ikona: IkonaYouTube },
+  { nazwa: "TikTok", opis: "najlepsze momenty w skrócie", href: site.linki.tiktok, Ikona: IkonaTikTok },
 ] as const;
 
 export default function Kontakt() {
@@ -92,7 +92,7 @@ export default function Kontakt() {
             <div>
               <h3 className="font-display text-2xl text-huk-white sm:text-3xl">Wesprzyj kanał</h3>
               <p className="mt-1 max-w-md text-xs leading-relaxed text-huk-t2 sm:text-sm">
-                Sprzęt, gry i lepsze streamy. Każda złotówka wraca do was w jakości.
+                Jeśli podoba Ci się to, co robię, możesz dorzucić cegiełkę do rozwoju kanału. Dzięki wielkie!
               </p>
             </div>
           </div>

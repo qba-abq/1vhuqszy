@@ -20,12 +20,12 @@ export default function Home() {
       <KursorNeon />
       <main className="relative z-10">
         <Hero />
-        <PasekMarquee slowa={["Hukszy", "Live", "Wt 17:00", "Pt 21:00", "Sb 21:00"]} />
+        <PasekMarquee slowa={["Hukszy", "Live", "Wt 16:00", "Pt 20:00", "Sb 20:00"]} />
         <OMnie />
         <Harmonogram />
         <PasekMarquee
           kierunek={-1}
-          slowa={["Klipy", "Highlights", "Memy", "Horror", "Jumpscare"]}
+          slowa={["Outlast", "Backrooms", "Log Riders", "Biped", "Roblox", "Red Dead"]}
         />
         <Highlights />
         <Hukszymetr />

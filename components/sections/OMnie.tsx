@@ -47,7 +47,7 @@ export default function OMnie() {
           <NaglowekSekcji nadtytul={`kim jest ${site.handle}`}>
             Głośno,
             <br />
-            szybko,
+            gęsto,
             <br />
             bez ściemy
           </NaglowekSekcji>
