@@ -175,7 +175,7 @@ export default function Harmonogram() {
 
         <div className="mt-12 flex flex-col items-center gap-4">
           <p className="text-center text-xs text-huk-t2">
-            Godziny potrafią się przesunąć. O zmianach informuję na Discordzie i Instagramie.
+            Godziny potrafią się przesunąć. O zmianach informuję na Instagramie.
           </p>
           <PrzyciskCTA href={site.linki.twitch}>Wbijaj na Twitcha</PrzyciskCTA>
         </div>

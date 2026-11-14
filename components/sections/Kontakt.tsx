@@ -27,7 +27,8 @@ const KANALY = [
   { nazwa: "Instagram", opis: "kulisy, zapowiedzi i zajawki", href: site.linki.instagram, Ikona: IkonaInstagram },
   { nazwa: "YouTube", opis: "gameplaye i akcje ze streamów", href: site.linki.youtube, Ikona: IkonaYouTube },
   { nazwa: "TikTok", opis: "najlepsze momenty w skrócie", href: site.linki.tiktok, Ikona: IkonaTikTok },
-] as const;
+  // pusty link w site.config (np. wygasłe zaproszenie na Discorda) = kafla i ikonki nie ma
+].filter((k) => k.href !== "");
 
 export default function Kontakt() {
   const sekcja = useRef<HTMLElement>(null);
@@ -58,7 +59,10 @@ export default function Kontakt() {
         </NaglowekSekcji>
 
         {/* ——— kanały ——— */}
-        <div className="mt-14 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6 lg:gap-4">
+        {/* flex + wrap zamiast siatki: liczba kanałów się zmienia (pusty link
+            w configu chowa kafel), a niepełny ostatni rząd ląduje na środku
+            zamiast zostawiać dziurę */}
+        <div className="mt-14 flex w-full flex-wrap justify-center gap-3 lg:flex-nowrap lg:gap-4">
           {KANALY.map(({ nazwa, opis, href, Ikona }) => (
             <Link
               key={nazwa}
@@ -67,7 +71,7 @@ export default function Kontakt() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="panel-hud group flex flex-col items-center gap-3 px-4 py-7 transition-all duration-300 hover:-translate-y-1 hover:border-huk-red hover:shadow-neon"
+              className="panel-hud group flex w-[calc(50%-6px)] flex-col items-center gap-3 px-4 py-7 transition-all duration-300 hover:-translate-y-1 hover:border-huk-red hover:shadow-neon sm:w-[calc((100%-24px)/3)] lg:w-auto lg:grow lg:basis-0"
             >
               <Ikona className="h-9 w-9 text-huk-t3 transition-all duration-300 group-hover:scale-110 group-hover:text-huk-red group-hover:drop-shadow-[0_0_12px_rgba(225,6,0,0.8)]" />
               <span className="font-display text-lg leading-none text-huk-white">{nazwa}</span>

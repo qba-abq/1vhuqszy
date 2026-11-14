@@ -108,8 +108,13 @@ export const site = {
     kick: "https://kick.com/hukszy",
     youtube: "https://youtube.com/@hukszytv",
     instagram: "https://instagram.com/hukszytv",
-    tiktok: "https://www.tiktok.com/@hukszy3",
-    discord: "https://discord.gg/cmsz7rwgu",
+    // @hukszy3 z paneli Twitcha już nie istnieje; @hukszy ma w opisie
+    // „Zapraszam na twitch/kick Hukszy, streamy wt/pt/sob" i ig hukszytv
+    tiktok: "https://www.tiktok.com/@hukszy",
+    // Zaproszenie z paneli Twitcha (cmsz7rwgu) wygasło 2026-11-15.
+    // Pusty = kafel Discorda się nie pokazuje. Wklej nowe zaproszenie
+    // ustawione na „nigdy nie wygasa" (Discord: Zaproś ludzi -> Edytuj link).
+    discord: "",
     donate: "https://streamelements.com/hukszy/tip",
     email: "kontakt@hukszy.pl",
   },

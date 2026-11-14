@@ -112,7 +112,7 @@ export default function Sklep() {
         <div className="mt-12 flex flex-col items-center gap-3">
           {!site.sklep.linkSklepu && (
             <p className="text-center text-xs text-huk-t2">
-              Sklep startuje niebawem. Chcesz coś z tej listy? Daj znać na Discordzie,
+              Sklep startuje niebawem. Chcesz coś z tej listy? Daj znać na czacie albo na Instagramie,
               a na razie możesz po prostu wesprzeć kanał.
             </p>
           )}
