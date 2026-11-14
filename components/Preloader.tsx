@@ -59,16 +59,30 @@ export default function Preloader() {
     else window.addEventListener("load", podbij, { once: true });
 
     const ctx = gsap.context(() => {
-      /* —— 1. wejście: nadtytuł, logotyp, pasek —— */
+      /* —— 1. wejście: nadtytuł, logotyp, pasek ——
+         fromTo, nie from: elementy mają opacity 0 już w HTML-u (strona jest
+         statyczna, więc preloader przychodzi gotowy, zanim ruszy JS). Z `from`
+         przez ułamek sekundy było widać pasek „0%", który dopiero potem znikał
+         i wjeżdżał animacją.                                                */
       const wejscie = gsap.timeline();
       wejscie
-        .from(nad.current, { opacity: 0, letterSpacing: "1.2em", duration: 0.9, ease: "power3.out" })
-        .from(
+        .fromTo(
+          nad.current,
+          { opacity: 0, letterSpacing: "1.2em" },
+          { opacity: 1, letterSpacing: "0.32em", duration: 0.9, ease: "power3.out" },
+        )
+        .fromTo(
           logo.current,
-          { opacity: 0, scale: 1.35, filter: "blur(16px)", duration: 1.05, ease: "expo.out" },
+          { opacity: 0, scale: 1.35, filter: "blur(16px)" },
+          { opacity: 1, scale: 1, filter: "blur(0px)", duration: 1.05, ease: "expo.out" },
           "-=0.5",
         )
-        .from(dol.current, { opacity: 0, y: 18, duration: 0.6, ease: "power2.out" }, "-=0.5");
+        .fromTo(
+          dol.current,
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" },
+          "-=0.5",
+        );
 
       /* —— 2. wyjście: drganie, błysk, rozdarcie —— */
       const wyjscie = gsap.timeline({ paused: true });
@@ -191,11 +205,11 @@ export default function Preloader() {
         ref={tresc}
         className="absolute inset-0 flex flex-col items-center justify-center gap-8 px-6"
       >
-        <p ref={nad} className="podtytul text-huk-red">
+        <p ref={nad} className="podtytul text-huk-red" style={{ opacity: 0 }}>
           wchodzisz na kanał
         </p>
 
-        <div ref={logo} className="w-[min(80vw,640px)]">
+        <div ref={logo} className="w-[min(80vw,640px)]" style={{ opacity: 0 }}>
           <Image
             src={site.assety.logoBaner}
             alt={site.nick}
@@ -207,7 +221,7 @@ export default function Preloader() {
           />
         </div>
 
-        <div ref={dol} className="w-full max-w-sm">
+        <div ref={dol} className="w-full max-w-sm" style={{ opacity: 0 }}>
           <div className="h-[3px] w-full overflow-hidden bg-white/10">
             <div
               ref={pasek}
